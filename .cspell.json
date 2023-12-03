@@ -1,0 +1,51 @@
+{
+  "version": "0.2",
+  "enableFiletypes": [
+    "git-commit",
+    "github-actions-workflow",
+    "julia",
+    "jupyter"
+  ],
+  "flagWords": [
+    "analyse",
+    "colour",
+    "comparision",
+    "favour",
+    "flavour",
+    "hte",
+    "optimise",
+    "paramater",
+    "parmater",
+    "transision",
+    "transisions"
+  ],
+  "ignorePaths": [
+    "**/.cspell.json",
+    ".editorconfig",
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    ".prettierignore",
+    ".vscode/*",
+    "pyproject.toml"
+  ],
+  "language": "en-US",
+  "words": [
+    "autoapi",
+    "autodoc",
+    "ComPWA",
+    "conda",
+    "mypy",
+    "PYTHONHASHSEED",
+    "SymPy"
+  ],
+  "ignoreWords": [
+    "PyPI",
+    "commitlint",
+    "prereleased",
+    "refdomain",
+    "refspecific",
+    "reftarget",
+    "reftype",
+    "rtfd"
+  ]
+}

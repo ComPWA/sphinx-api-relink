@@ -1,4 +1,4 @@
-# PDG role for Sphinx
+# `sphinx-api-relink`
 
 [![PyPI package](https://badge.fury.io/py/sphinx-api-relink.svg)](https://pypi.org/project/sphinx-api-relink)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/sphinx-api-relink)](https://pypi.org/project/sphinx-api-relink)

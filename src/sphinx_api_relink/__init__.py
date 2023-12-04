@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import shutil
-import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -11,20 +10,9 @@ from sphinx.addnodes import pending_xref, pending_xref_condition
 from sphinx.domains.python import parse_reftarget
 from sphinx.ext.apidoc import main as sphinx_apidoc
 
-if sys.version_info < (3, 8):
-    from importlib_metadata import version
-else:
-    from importlib.metadata import version
-
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
     from sphinx.environment import BuildEnvironment
-
-
-def get_version(package_name: str) -> str:
-    """Get the version (MAJOR.MINOR.PATCH) of a Python package."""
-    v = version(package_name)
-    return ".".join(v.split(".")[:3])
 
 
 def setup(app: Sphinx) -> dict[str, Any]:

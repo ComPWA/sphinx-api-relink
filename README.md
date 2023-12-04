@@ -22,9 +22,7 @@ Just install through [PyPI](https://pypi.org) with `pip`:
 pip install sphinx-api-relink
 ```
 
-Next, in your
-[Sphinx configuration file](https://www.sphinx-doc.org/en/master/usage/configuration.html)
-(`conf.py`), add `"sphinx_api_relink"` to your `extensions`:
+Next, in your [Sphinx configuration file](https://www.sphinx-doc.org/en/master/usage/configuration.html) (`conf.py`), add `"sphinx_api_relink"` to your `extensions`:
 
 ```python
 extensions = [

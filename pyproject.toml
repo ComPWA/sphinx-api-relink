@@ -27,6 +27,7 @@ classifiers = [
 dependencies = [
     "Sphinx>=4.4",
     "docutils",
+    'importlib-metadata; python_version <"3.8.0"',
 ]
 description = "Relink type hints in your Sphinx API"
 dynamic = ["version"]

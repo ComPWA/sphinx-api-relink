@@ -22,9 +22,7 @@ Just install through [PyPI](https://pypi.org) with `pip`:
 pip install sphinx-api-relink
 ```
 
-Next, in your
-[Sphinx configuration file](https://www.sphinx-doc.org/en/master/usage/configuration.html)
-(`conf.py`), add `"sphinx_api_relink"` to your `extensions`:
+Next, in your [Sphinx configuration file](https://www.sphinx-doc.org/en/master/usage/configuration.html) (`conf.py`), add `"sphinx_api_relink"` to your `extensions`:
 
 ```python
 extensions = [
@@ -49,4 +47,25 @@ The second, **`api_target_types`**, is useful when you want to redirect the refe
 api_target_types: dict[str, str] = {
     "RangeDefinition": "obj",
 }
+```
+
+## Generate API
+
+To generate the API for [`sphinx.ext.autodoc`](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html), add this to your `conf.py`:
+
+```python
+api_package_path = "../src/my_package"  # relative to conf.py
+```
+
+The API is generated with the same style used by the ComPWA repositories (see e.g. [ampform.rtfd.io/en/stable/api/ampform.html](https://ampform.readthedocs.io/en/stable/api/ampform.html)). To use the default template, set:
+
+```python
+generate_apidoc_use_compwa_template = False
+```
+
+Other configuration values (with their defaults):
+
+```python
+generate_apidoc_directory = "api"
+generate_apidoc_excludes = ["version.py"]
 ```

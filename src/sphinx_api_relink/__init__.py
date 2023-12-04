@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import shutil
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import sphinx.domains.python
 from docutils import nodes
 from sphinx.addnodes import pending_xref, pending_xref_condition
 from sphinx.domains.python import parse_reftarget
+from sphinx.ext.apidoc import main as sphinx_apidoc
 
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
@@ -17,11 +20,60 @@ if TYPE_CHECKING:
 def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("api_target_substitutions", default={}, rebuild="env")
     app.add_config_value("api_target_types", default={}, rebuild="env")
+    app.add_config_value("generate_apidoc_directory", default="api", rebuild="env")
+    app.add_config_value("generate_apidoc_excludes", default=None, rebuild="env")
+    app.add_config_value("generate_apidoc_package_path", default=None, rebuild="env")
+    app.add_config_value("generate_apidoc_use_compwa_template", True, rebuild="env")
+    app.connect("config-inited", generate_apidoc)
     app.connect("config-inited", replace_type_to_xref)
     return {
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }
+
+
+def generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:
+    config_key = "generate_apidoc_package_path"
+    package_path: str | None = getattr(app.config, config_key, None)
+    if package_path is None:
+        return
+    abs_package_path = Path(app.srcdir) / package_path
+    apidoc_dir = Path(app.srcdir) / app.config.generate_apidoc_directory
+    _run_sphinx_apidoc(
+        abs_package_path,
+        apidoc_dir,
+        excludes=app.config.generate_apidoc_excludes,
+        use_compwa_template=app.config.generate_apidoc_use_compwa_template,
+    )
+
+
+def _run_sphinx_apidoc(
+    package_path: Path,
+    apidoc_dir: str = "api",
+    excludes: list[str] | None = None,
+    use_compwa_template: bool = True,
+) -> None:
+    if not package_path.exists():
+        msg = f"Package under {package_path} does not exist"
+        raise FileNotFoundError(msg)
+    shutil.rmtree(apidoc_dir, ignore_errors=True)
+    args: list[str] = [str(package_path)]
+    if excludes is None:
+        excludes = []
+    version_file = "version.py"
+    if (package_path / version_file).exists():
+        excludes.append(version_file)
+    for file in excludes:
+        excluded_path = package_path / file
+        if not excluded_path.exists():
+            msg = f"Excluded file {excluded_path} does not exist"
+            raise FileNotFoundError(msg)
+        args.append(str(package_path / file))
+    args.extend(f"-o {apidoc_dir} --force --no-toc --separate".split())
+    if use_compwa_template:
+        template_dir = Path(__file__).parent / "templates"
+        args.extend(f"--templatedir {template_dir}".split())
+    sphinx_apidoc(args)
 
 
 def replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:

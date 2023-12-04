@@ -7,6 +7,11 @@ import os
 import re
 import sys
 
+if sys.version_info < (3, 8):
+    from importlib_metadata import version
+else:
+    from importlib.metadata import version
+
 __VERSION_REMAPPING: dict[str, dict[str, str]] = {}
 
 
@@ -30,6 +35,12 @@ def get_execution_mode() -> str:
     if "EXECUTE_NB" in os.environ:
         return "cache"
     return "off"
+
+
+def get_package_version(package_name: str) -> str:
+    """Get the version (MAJOR.MINOR.PATCH) of a Python package."""
+    v = version(package_name)
+    return ".".join(v.split(".")[:3])
 
 
 def pin(

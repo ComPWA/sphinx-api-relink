@@ -1,5 +1,3 @@
-"""Link to PDG reviews and listings in Sphinx documentation."""
-
 from __future__ import annotations
 
 import shutil

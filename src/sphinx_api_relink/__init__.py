@@ -29,7 +29,6 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.connect("config-inited", set_linkcode_resolve)
     app.connect("config-inited", generate_apidoc)
     app.connect("config-inited", replace_type_to_xref)
-    app.setup_extension("sphinx.ext.linkcode")
     return {
         "parallel_read_safe": True,
         "parallel_write_safe": True,
@@ -39,13 +38,10 @@ def setup(app: Sphinx) -> dict[str, Any]:
 def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
     github_repo: str | None = app.config.api_github_repo
     if github_repo is None:
-        msg = (
-            "Please set api_github_repo in conf.py, e.g. api_github_repo ="
-            ' "ComPWA/sphinx-api-relink"'
-        )
-        raise ValueError(msg)
+        return
     debug: bool = app.config.api_linkcode_debug
     app.config.linkcode_resolve = get_linkcode_resolve(github_repo, debug)  # type: ignore[attr-defined]
+    app.setup_extension("sphinx.ext.linkcode")
 
 
 def generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:

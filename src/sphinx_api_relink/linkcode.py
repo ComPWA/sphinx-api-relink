@@ -118,15 +118,15 @@ def get_blob_url(github_repo: str) -> str:
     print_once(f"The URL {blob_url} seems not to exist", color=Fore.MAGENTA)
     tag = _get_latest_tag()
     if tag is not None:
-        blob_url = f"{repo_url}/tree/{tag}"
+        blob_url = f"{repo_url}/blob/{tag}"
         print_once(f"--> falling back to {blob_url}", color=Fore.MAGENTA)
         if _url_exists(blob_url):
             return blob_url
-    blob_url = f"{repo_url}/tree/main"
+    blob_url = f"{repo_url}/blob/main"
     print_once(f"--> falling back to {blob_url}", color=Fore.MAGENTA)
     if _url_exists(blob_url):
         return blob_url
-    blob_url = f"{repo_url}/tree/master"
+    blob_url = f"{repo_url}/blob/master"
     print_once(f"--> falling back to {blob_url}", color=Fore.MAGENTA)
     return blob_url
 

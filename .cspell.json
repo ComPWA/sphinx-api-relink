@@ -39,6 +39,7 @@
   "ignoreWords": [
     "PyPI",
     "commitlint",
+    "linkcode",
     "prereleased",
     "refdomain",
     "refspecific",

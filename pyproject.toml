@@ -26,8 +26,10 @@ classifiers = [
 ]
 dependencies = [
     "Sphinx>=4.4",
+    "colorama",
     "docutils",
     'importlib-metadata; python_version <"3.8.0"',
+    'typing-extensions; python_version <"3.8.0"',
 ]
 description = "Relink type hints in your Sphinx API"
 dynamic = ["version"]
@@ -51,7 +53,9 @@ lint = [
 ]
 mypy = [
     "mypy",
+    "types-colorama",
     "types-docutils",
+    "types-requests",
 ]
 sty = [
     "pre-commit >=1.4.0",

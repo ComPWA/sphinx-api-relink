@@ -10,24 +10,43 @@ from sphinx.addnodes import pending_xref, pending_xref_condition
 from sphinx.domains.python import parse_reftarget
 from sphinx.ext.apidoc import main as sphinx_apidoc
 
+from sphinx_api_relink.linkcode import get_linkcode_resolve
+
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
     from sphinx.environment import BuildEnvironment
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
+    app.add_config_value("api_github_repo", default=None, rebuild="env")
+    app.add_config_value("api_linkcode_debug", default=False, rebuild="env")
     app.add_config_value("api_target_substitutions", default={}, rebuild="env")
     app.add_config_value("api_target_types", default={}, rebuild="env")
     app.add_config_value("generate_apidoc_directory", default="api", rebuild="env")
     app.add_config_value("generate_apidoc_excludes", default=None, rebuild="env")
     app.add_config_value("generate_apidoc_package_path", default=None, rebuild="env")
     app.add_config_value("generate_apidoc_use_compwa_template", True, rebuild="env")
+    app.connect("config-inited", set_linkcode_resolve)
     app.connect("config-inited", generate_apidoc)
     app.connect("config-inited", replace_type_to_xref)
+    app.setup_extension("sphinx.ext.linkcode")
     return {
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }
+
+
+def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
+    raw_config = app.config._raw_config  # pyright: ignore[reportPrivateUsage]
+    github_repo: str | None = app.config.api_github_repo
+    if github_repo is None:
+        msg = (
+            "Please set api_github_repo in conf.py, e.g. api_github_repo ="
+            ' "ComPWA/sphinx-api-relink"'
+        )
+        raise ValueError(msg)
+    debug: bool = app.config.api_linkcode_debug
+    raw_config["linkcode_resolve"] = get_linkcode_resolve(github_repo, debug)
 
 
 def generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:

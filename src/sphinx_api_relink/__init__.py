@@ -37,7 +37,6 @@ def setup(app: Sphinx) -> dict[str, Any]:
 
 
 def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
-    raw_config = app.config._raw_config  # pyright: ignore[reportPrivateUsage]
     github_repo: str | None = app.config.api_github_repo
     if github_repo is None:
         msg = (
@@ -46,7 +45,7 @@ def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
         )
         raise ValueError(msg)
     debug: bool = app.config.api_linkcode_debug
-    raw_config["linkcode_resolve"] = get_linkcode_resolve(github_repo, debug)
+    app.config.linkcode_resolve = get_linkcode_resolve(github_repo, debug)  # type: ignore[attr-defined]
 
 
 def generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:

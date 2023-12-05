@@ -49,7 +49,7 @@ api_target_types: dict[str, str] = {
 }
 ```
 
-The extension also links to the source code on GitHub through the [`sphinx.ext.linkcode`](https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html) extension. You need to specify the GitHub organization and the repository name as follows:
+The extension can also link to the source code on GitHub through the [`sphinx.ext.linkcode`](https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html) extension. To activate, specify the GitHub organization and the repository name as follows:
 
 ```
 api_github_repo: str = "ComPWA/sphinx-api-relink"

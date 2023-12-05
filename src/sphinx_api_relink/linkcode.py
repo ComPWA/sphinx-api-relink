@@ -159,8 +159,11 @@ def _get_latest_tag() -> str | None:
 @lru_cache(maxsize=None)
 def _url_exists(url: str) -> bool:
     try:
-        response = requests.head(url)  # noqa: S113
-        return response.status_code < 300  # noqa: PLR2004, TRY300
+        response = requests.head(url, timeout=5)
+        redirect_url = response.headers.get("Location")
+        if redirect_url is None:
+            return response.status_code < 400  # noqa: PLR2004
+        return _url_exists(redirect_url)
     except requests.RequestException:
         return False
 

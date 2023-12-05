@@ -49,6 +49,14 @@ api_target_types: dict[str, str] = {
 }
 ```
 
+The extension also links to the source code on GitHub through the [`sphinx.ext.linkcode`](https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html) extension. You need to specify the GitHub organization and the repository name as follows:
+
+```
+api_github_repo: str = "ComPWA/sphinx-api-relink"
+```
+
+Set `api_linkcode_debug = True` to print the generated URLs to the console.
+
 ## Generate API
 
 To generate the API for [`sphinx.ext.autodoc`](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html), add this to your `conf.py`:

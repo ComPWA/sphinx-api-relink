@@ -26,7 +26,7 @@ def get_linkcode_resolve(
     github_repo: str, debug: bool
 ) -> Callable[[str, LinkcodeInfo], str | None]:
     def linkcode_resolve(domain: str, info: LinkcodeInfo) -> str | None:
-        path = _get_path(domain, info)
+        path = _get_path(domain, info, debug)
         if path is None:
             return None
         blob_url = get_blob_url(github_repo)
@@ -38,12 +38,17 @@ def get_linkcode_resolve(
     return linkcode_resolve
 
 
-def _get_path(domain: str, info: LinkcodeInfo) -> str | None:
+def _get_path(domain: str, info: LinkcodeInfo, debug: bool) -> str | None:
     obj = __get_object(domain, info)
     if obj is None:
         return None
-
-    source_file = inspect.getsourcefile(obj)
+    try:
+        source_file = inspect.getsourcefile(obj)
+    except TypeError:
+        if debug:
+            msg = f"  Cannot source file for {info['fullname']!r} of type {type(obj)}"
+            print_once(msg, color=Fore.MAGENTA)
+        return None
     if not source_file:
         return None
 

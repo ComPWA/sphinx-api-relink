@@ -6,25 +6,36 @@ from __future__ import annotations
 import os
 import re
 import sys
+from functools import lru_cache
+
+from colorama import Fore, Style
 
 if sys.version_info < (3, 8):
     from importlib_metadata import version
 else:
     from importlib.metadata import version
 
+__DEFAULT_BRANCH = "main"
 __VERSION_REMAPPING: dict[str, dict[str, str]] = {}
 
 
 def get_branch_name() -> str:
-    """Get the branch name from the environment for Read the Docs.
+    """Get the branch name from the environment for GitHub or Read the Docs.
 
-    See https://docs.readthedocs.io/en/stable/builds.html.
+    See https://docs.readthedocs.io/en/stable/builds.html and
+    https://docs.github.com/en/actions/learn-github-actions/variables.
     """
-    branch_name = os.environ.get("READTHEDOCS_VERSION", "stable")
+    branch_name = os.environ.get("READTHEDOCS_VERSION")
     if branch_name == "latest":
-        return "main"
-    if re.match(r"^\d+$", branch_name):  # PR preview
-        return "stable"
+        return __DEFAULT_BRANCH
+    if branch_name is None:
+        branch_name = os.environ.get("GITHUB_REF", __DEFAULT_BRANCH)
+        branch_name = branch_name.replace("refs/heads/", "")
+        branch_name = branch_name.replace("refs/pull/", "")
+        branch_name = branch_name.replace("refs/tags/", "")
+        if re.match(r"^\d+/[a-z]+$", branch_name) is not None:
+            branch_name = __DEFAULT_BRANCH  # PR preview
+    print_once(f"Linking pages to this Git ref: {branch_name}", color=Fore.MAGENTA)
     return branch_name
 
 
@@ -128,3 +139,9 @@ def set_intersphinx_version_remapping(
                 )
                 raise TypeError(msg)
     __VERSION_REMAPPING.update(version_remapping)
+
+
+@lru_cache(maxsize=None)
+def print_once(message: str, *, color: str = Fore.RED) -> None:
+    colored_text = f"{color}{message}{Style.RESET_ALL}"
+    print(colored_text)  # noqa: T201

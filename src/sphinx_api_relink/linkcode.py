@@ -11,7 +11,9 @@ from typing import TYPE_CHECKING, Any, Callable, TypedDict
 from urllib.parse import quote
 
 import requests
-from colorama import Fore, Style
+from colorama import Fore
+
+from sphinx_api_relink.helpers import print_once
 
 if TYPE_CHECKING:
     from types import ModuleType
@@ -166,9 +168,3 @@ def _url_exists(url: str) -> bool:
         return _url_exists(redirect_url)
     except requests.RequestException:
         return False
-
-
-@lru_cache(maxsize=None)
-def print_once(message: str, *, color: str = Fore.RED) -> None:
-    colored_text = f"{color}{message}{Style.RESET_ALL}"
-    print(colored_text)  # noqa: T201

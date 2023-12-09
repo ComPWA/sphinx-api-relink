@@ -46,17 +46,23 @@ def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
 
 def generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:
     config_key = "generate_apidoc_package_path"
-    package_path: str | None = getattr(app.config, config_key, None)
+    package_path: list[str] | str | None = getattr(app.config, config_key, None)
     if package_path is None:
         return
-    abs_package_path = Path(app.srcdir) / package_path
     apidoc_dir = Path(app.srcdir) / app.config.generate_apidoc_directory
-    _run_sphinx_apidoc(
-        abs_package_path,
-        apidoc_dir,
-        excludes=app.config.generate_apidoc_excludes,
-        use_compwa_template=app.config.generate_apidoc_use_compwa_template,
-    )
+    shutil.rmtree(apidoc_dir, ignore_errors=True)
+    if isinstance(package_path, str):
+        package_dirs = [package_path]
+    else:
+        package_dirs = package_path
+    for rel_dir in package_dirs:
+        abs_package_path = Path(app.srcdir) / rel_dir
+        _run_sphinx_apidoc(
+            abs_package_path,
+            apidoc_dir,
+            excludes=app.config.generate_apidoc_excludes,
+            use_compwa_template=app.config.generate_apidoc_use_compwa_template,
+        )
 
 
 def _run_sphinx_apidoc(
@@ -68,7 +74,6 @@ def _run_sphinx_apidoc(
     if not package_path.exists():
         msg = f"Package under {package_path} does not exist"
         raise FileNotFoundError(msg)
-    shutil.rmtree(apidoc_dir, ignore_errors=True)
     args: list[str] = [str(package_path)]
     if excludes is None:
         excludes = []

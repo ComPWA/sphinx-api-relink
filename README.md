@@ -65,6 +65,15 @@ To generate the API for [`sphinx.ext.autodoc`](https://www.sphinx-doc.org/en/mas
 generate_apidoc_package_path = "../src/my_package"  # relative to conf.py
 ```
 
+Multiple packages can be listed as well:
+
+```python
+generate_apidoc_package_path = [
+    "../src/package1",
+    "../src/package2",
+]
+```
+
 The API is generated with the same style used by the ComPWA repositories (see e.g. [ampform.rtfd.io/en/stable/api/ampform.html](https://ampform.readthedocs.io/en/stable/api/ampform.html)). To use the default template, set:
 
 ```python

@@ -13,8 +13,10 @@ from sphinx.ext.apidoc import main as sphinx_apidoc
 from sphinx_api_relink.linkcode import get_linkcode_resolve
 
 if TYPE_CHECKING:
+    from docutils.parsers.rst.states import Inliner
     from sphinx.application import Sphinx
     from sphinx.environment import BuildEnvironment
+    from sphinx.util.typing import RoleFunction
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
@@ -29,6 +31,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.connect("config-inited", set_linkcode_resolve)
     app.connect("config-inited", generate_apidoc)
     app.connect("config-inited", replace_type_to_xref)
+    app.add_role("wiki", wiki_role("https://en.wikipedia.org/wiki/%s"))
     return {
         "parallel_read_safe": True,
         "parallel_write_safe": True,
@@ -187,3 +190,24 @@ def _create_nodes(env: BuildEnvironment, title: str) -> list[nodes.Node]:
             pending_xref_condition("", title, condition="*"),
         ]
     return [nodes.Text(short_name)]
+
+
+def wiki_role(pattern: str) -> RoleFunction:
+    def role(  # noqa: PLR0913
+        name: str,
+        rawtext: str,
+        text: str,
+        lineno: int,
+        inliner: Inliner,
+        options: dict | None = None,
+        content: list[str] | None = None,
+    ) -> tuple[list[nodes.Node], list[nodes.system_message]]:
+        output_text = text
+        output_text = output_text.replace("_", " ")
+        url = pattern % (text,)
+        if options is None:
+            options = {}
+        reference_node = nodes.reference(rawtext, output_text, refuri=url, **options)
+        return [reference_node], []
+
+    return role

@@ -45,6 +45,7 @@
     "refspecific",
     "reftarget",
     "reftype",
+    "refuri",
     "rtfd",
     "srcdir",
     "templatedir"

@@ -210,4 +210,4 @@ def wiki_role(pattern: str) -> RoleFunction:
         reference_node = nodes.reference(rawtext, output_text, refuri=url, **options)
         return [reference_node], []
 
-    return role
+    return role  # type:ignore[return-value]

@@ -104,7 +104,7 @@ def pin_minor(package_name: str) -> str:
 
 
 def set_intersphinx_version_remapping(
-    version_remapping: dict[str, dict[str, str]]
+    version_remapping: dict[str, dict[str, str]],
 ) -> None:
     if not isinstance(version_remapping, dict):
         msg = (

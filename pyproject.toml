@@ -46,21 +46,16 @@ requires-python = ">=3.7"
 
 [project.optional-dependencies]
 dev = ["sphinx-api-relink[sty]"]
-format = ["black"]
-lint = [
-    "ruff",
-    "sphinx-api-relink[mypy]",
-]
-mypy = [
+sty = [
     "mypy",
+    "pre-commit >=1.4.0",
+    "ruff",
+    "sphinx-api-relink[types]",
+]
+types = [
     "types-colorama",
     "types-docutils",
     "types-requests",
-]
-sty = [
-    "pre-commit >=1.4.0",
-    "sphinx-api-relink[format]",
-    "sphinx-api-relink[lint]",
 ]
 
 [project.readme]
@@ -90,31 +85,6 @@ where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/version.py"
-
-[tool.black]
-exclude = '''
-/(
-    .*\.egg-info
-    | .*build
-    | \.eggs
-    | \.git
-    | \.pytest_cache
-    | \.tox
-    | \.venv
-    | \.vscode
-    | dist
-)/
-'''
-include = '\.pyi?$'
-preview = true
-target-version = [
-    "py310",
-    "py311",
-    "py312",
-    "py37",
-    "py38",
-    "py39",
-]
 
 [tool.coverage.run]
 branch = true
@@ -157,6 +127,16 @@ reportUnusedVariable = true
 typeCheckingMode = "strict"
 
 [tool.ruff]
+preview = true
+show-fixes = true
+src = ["src"]
+target-version = "py37"
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
 extend-select = [
     "A",
     "B",
@@ -201,16 +181,19 @@ ignore = [
     "D407",
     "D416",
     "E501",
+    "ISC001",
+    "PLW1514",
     "PLW2901",
+    "S404",
     "SIM108",
     "UP036",
 ]
-show-fixes = true
-src = ["src"]
-target-version = "py37"
 task-tags = ["cspell"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
+[tool.ruff.lint.per-file-ignores]
 "setup.py" = ["D100"]
 "tests/*" = [
     "D",
@@ -221,7 +204,7 @@ task-tags = ["cspell"]
     "S101",
 ]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.tomlsort]

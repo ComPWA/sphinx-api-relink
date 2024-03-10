@@ -15,6 +15,7 @@
     "stkb.rewrap",
     "streetsidesoftware.code-spell-checker",
     "tamasfe.even-better-toml",
+    "wholroyd.jinja",
     "yzhang.markdown-all-in-one"
   ],
   "unwantedRecommendations": [

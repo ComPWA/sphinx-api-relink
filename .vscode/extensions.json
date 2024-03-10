@@ -11,11 +11,10 @@
     "ms-python.vscode-pylance",
     "redhat.vscode-yaml",
     "ryanluker.vscode-coverage-gutters",
-    "Soulcode.vscode-unwanted-extensions",
+    "soulcode.vscode-unwanted-extensions",
     "stkb.rewrap",
     "streetsidesoftware.code-spell-checker",
     "tamasfe.even-better-toml",
-    "tyriar.sort-lines",
     "yzhang.markdown-all-in-one"
   ],
   "unwantedRecommendations": [
@@ -26,6 +25,7 @@
     "ms-python.flake8",
     "ms-python.isort",
     "ms-python.pylint",
-    "travisillig.vscode-json-stable-stringify"
+    "travisillig.vscode-json-stable-stringify",
+    "tyriar.sort-lines"
   ]
 }

@@ -102,9 +102,9 @@ def replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
         k: v if isinstance(v, str) else v[1] for k, v in target_substitutions.items()
     }
     ref_types = _get_target_types(app)
-    ref_types.update(
-        {v[1]: v[0] for v in target_substitutions.values() if isinstance(v, tuple)}
-    )
+    ref_types.update({
+        v[1]: v[0] for v in target_substitutions.values() if isinstance(v, tuple)
+    })
 
     def _new_type_to_xref(
         target: str,
@@ -193,7 +193,7 @@ def _create_nodes(env: BuildEnvironment, title: str) -> list[nodes.Node]:
 
 
 def wiki_role(pattern: str) -> RoleFunction:
-    def role(  # noqa: PLR0913
+    def role(  # noqa: PLR0913, PLR0917
         name: str,
         rawtext: str,
         text: str,

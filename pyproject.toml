@@ -50,9 +50,9 @@ sty = [
     "mypy",
     "pre-commit >=1.4.0",
     "ruff",
+    "sphinx-api-relink[types]",
 ]
 types = [
-    "mypy",
     "types-colorama",
     "types-docutils",
     "types-requests",

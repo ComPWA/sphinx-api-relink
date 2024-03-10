@@ -22,13 +22,12 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
     },
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.rulers": [88]
   },
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "black-formatter.importStrategy": "fromEnvironment",
   "coverage-gutters.coverageFileNames": ["coverage.xml"],
   "coverage-gutters.coverageReportFileName": "**/htmlcov/index.html",
   "coverage-gutters.showGutterCoverage": false,
@@ -53,5 +52,6 @@
   "python.testing.unittestEnabled": false,
   "rewrap.wrappingColumn": 88,
   "ruff.enable": true,
+  "ruff.importStrategy": "fromEnvironment",
   "ruff.organizeImports": true
 }

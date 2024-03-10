@@ -44,14 +44,17 @@
   "git.rebaseWhenSync": true,
   "github-actions.workflows.pinned.refresh.enabled": true,
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
+  "gitlens.telemetry.enabled": false,
   "multiDiffEditor.experimental.enabled": true,
   "mypy-type-checker.args": ["--config-file=${workspaceFolder}/pyproject.toml"],
   "mypy-type-checker.importStrategy": "fromEnvironment",
   "python.analysis.autoImportCompletions": false,
   "python.analysis.typeCheckingMode": "strict",
   "python.testing.unittestEnabled": false,
+  "redhat.telemetry.enabled": false,
   "rewrap.wrappingColumn": 88,
   "ruff.enable": true,
   "ruff.importStrategy": "fromEnvironment",
-  "ruff.organizeImports": true
+  "ruff.organizeImports": true,
+  "telemetry.telemetryLevel": "off"
 }

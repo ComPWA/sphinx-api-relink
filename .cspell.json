@@ -16,6 +16,7 @@
   "ignorePaths": [
     "**/*.rst_t",
     "**/.cspell.json",
+    "*.rst_t",
     ".editorconfig",
     ".gitignore",
     ".pre-commit-config.yaml",

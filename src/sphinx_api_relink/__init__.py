@@ -1,16 +1,30 @@
+# pyright: reportAttributeAccessIssue=false
 from __future__ import annotations
 
 import shutil
+import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import sphinx.domains.python
 from docutils import nodes
 from sphinx.addnodes import pending_xref, pending_xref_condition
-from sphinx.domains.python import parse_reftarget
 from sphinx.ext.apidoc import main as sphinx_apidoc
 
 from sphinx_api_relink.linkcode import get_linkcode_resolve
+
+if sys.version_info < (3, 8):
+    from importlib_metadata import version
+else:
+    from importlib.metadata import version
+
+__SPHINX_VERSION = tuple(int(i) for i in version("sphinx").split(".") if i.isdigit())
+if __SPHINX_VERSION < (7, 3):
+    from sphinx.domains.python import parse_reftarget  # type:ignore[attr-defined]
+else:
+    from sphinx.domains.python._annotations import (  # type:ignore[import-not-found,no-redef]
+        parse_reftarget,  # noqa: PLC2701
+    )
 
 if TYPE_CHECKING:
     from docutils.parsers.rst.states import Inliner
@@ -43,7 +57,7 @@ def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
     if github_repo is None:
         return
     debug: bool = app.config.api_linkcode_debug
-    app.config.linkcode_resolve = get_linkcode_resolve(github_repo, debug)  # type: ignore[attr-defined]
+    app.config.linkcode_resolve = get_linkcode_resolve(github_repo, debug)  # type:ignore[attr-defined]
     app.setup_extension("sphinx.ext.linkcode")
 
 
@@ -108,7 +122,7 @@ def replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
 
     def _new_type_to_xref(
         target: str,
-        env: BuildEnvironment | None = None,  # type: ignore[assignment]
+        env: BuildEnvironment | None = None,  # type:ignore[assignment]
         suppress_prefix: bool = False,
     ) -> pending_xref:
         reftype, target, title, refspecific = parse_reftarget(target, suppress_prefix)
@@ -127,7 +141,10 @@ def replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
             **_get_env_kwargs(env),
         )
 
-    sphinx.domains.python.type_to_xref = _new_type_to_xref
+    if __SPHINX_VERSION < (7, 3):
+        sphinx.domains.python.type_to_xref = _new_type_to_xref  # pyright:ignore[reportPrivateImportUsage]
+    else:
+        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref
 
 
 def _get_target_substitutions(app: Sphinx) -> dict[str, str | tuple[str, str]]:

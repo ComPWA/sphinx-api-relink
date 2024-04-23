@@ -43,6 +43,7 @@
     "commitlint",
     "linkcode",
     "prereleased",
+    "redef",
     "refdomain",
     "refspecific",
     "reftarget",

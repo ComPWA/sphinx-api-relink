@@ -136,7 +136,7 @@ def get_blob_url(github_repo: str) -> str:
 @lru_cache(maxsize=1)
 def _get_commit_sha() -> str:
     result = subprocess.run(
-        ["git", "rev-parse", "HEAD"],  # noqa: S603, S607
+        ["git", "rev-parse", "HEAD"],  # noqa: S607
         capture_output=True,
         check=True,
         text=True,
@@ -148,7 +148,7 @@ def _get_commit_sha() -> str:
 def _get_latest_tag() -> str | None:
     try:
         result = subprocess.check_output(
-            ["git", "describe", "--tags", "--exact-match"],  # noqa: S603, S607
+            ["git", "describe", "--tags", "--exact-match"],  # noqa: S607
             stderr=subprocess.PIPE,
             universal_newlines=True,
         )

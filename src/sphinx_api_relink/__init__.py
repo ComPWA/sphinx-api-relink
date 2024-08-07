@@ -144,7 +144,7 @@ def replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
     if __SPHINX_VERSION < (7, 3):
         sphinx.domains.python.type_to_xref = _new_type_to_xref  # pyright:ignore[reportPrivateImportUsage]
     else:
-        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref
+        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref  # noqa: SLF001
 
 
 def _get_target_substitutions(app: Sphinx) -> dict[str, str | tuple[str, str]]:
@@ -211,13 +211,13 @@ def _create_nodes(env: BuildEnvironment, title: str) -> list[nodes.Node]:
 
 def wiki_role(pattern: str) -> RoleFunction:
     def role(  # noqa: PLR0913, PLR0917
-        name: str,
+        name: str,  # noqa: ARG001
         rawtext: str,
         text: str,
-        lineno: int,
-        inliner: Inliner,
+        lineno: int,  # noqa: ARG001
+        inliner: Inliner,  # noqa: ARG001
         options: dict | None = None,
-        content: list[str] | None = None,
+        content: list[str] | None = None,  # noqa: ARG001
     ) -> tuple[list[nodes.Node], list[nodes.system_message]]:
         output_text = text
         output_text = output_text.replace("_", " ")

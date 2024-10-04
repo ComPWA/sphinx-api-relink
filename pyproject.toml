@@ -84,6 +84,8 @@ namespaces = false
 where = ["src"]
 
 [tool.setuptools_scm]
+local_scheme = "no-local-version"
+version_scheme = "post-release"
 write_to = "src/version.py"
 
 [tool.coverage.run]
@@ -99,6 +101,26 @@ files = [
 ]
 show_error_codes = true
 warn_unused_configs = true
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.activation.env]
+PRETTIER_LEGACY_CLI = "1"
+
+[tool.pixi.dependencies]
+python = "3.9.*"
+
+[tool.pixi.environments]
+default = {features = [
+    "dev",
+    "sty",
+    "types",
+]}
+
+[tool.pixi.pypi-dependencies]
+sphinx-api-relink = {path = ".", editable = true}
 
 [tool.pyright]
 exclude = [
@@ -130,7 +152,6 @@ typeCheckingMode = "strict"
 preview = true
 show-fixes = true
 src = ["src"]
-target-version = "py37"
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -197,6 +218,5 @@ sort_first = [
     "tool.setuptools",
     "tool.setuptools_scm",
 ]
-sort_table_keys = true
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true

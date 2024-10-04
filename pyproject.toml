@@ -76,7 +76,7 @@ package-dir = {"" = "src"}
 [tool.setuptools.package-data]
 "*" = [
     "py.typed",
-    "templates/*.rst_t",
+    "templates/*.rst.jinja",
 ]
 
 [tool.setuptools.packages.find]

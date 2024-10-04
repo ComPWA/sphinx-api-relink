@@ -14,9 +14,8 @@
     "transisions"
   ],
   "ignorePaths": [
-    "**/*.rst_t",
+    "**/*.rst.jinja",
     "**/.cspell.json",
-    "*.rst_t",
     ".editorconfig",
     ".envrc",
     ".gitattributes",

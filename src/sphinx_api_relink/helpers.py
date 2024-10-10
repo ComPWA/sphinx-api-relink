@@ -6,7 +6,7 @@ from __future__ import annotations
 import os
 import re
 import sys
-from functools import lru_cache
+from functools import cache
 
 from colorama import Fore, Style
 
@@ -141,7 +141,7 @@ def set_intersphinx_version_remapping(
     __VERSION_REMAPPING.update(version_remapping)
 
 
-@lru_cache(maxsize=None)
+@cache
 def print_once(message: str, *, color: str = Fore.RED) -> None:
     colored_text = f"{color}{message}{Style.RESET_ALL}"
     print(colored_text)  # noqa: T201

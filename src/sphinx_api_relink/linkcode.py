@@ -5,7 +5,7 @@ from __future__ import annotations
 import inspect
 import subprocess
 import sys
-from functools import lru_cache
+from functools import cache, lru_cache
 from os.path import dirname, relpath
 from typing import TYPE_CHECKING, Any, Callable, TypedDict
 from urllib.parse import quote
@@ -66,13 +66,13 @@ def _get_path(domain: str, info: LinkcodeInfo, debug: bool) -> str | None:
     return f"{path}#{linenumbers}"
 
 
-@lru_cache(maxsize=None)
+@cache
 def _get_package(module_name: str) -> ModuleType:
     package_name = module_name.split(".")[0]
     return __get_module(package_name)
 
 
-@lru_cache(maxsize=None)
+@cache
 def __get_module(module_name: str) -> ModuleType:
     module = sys.modules.get(module_name)
     if module is None:
@@ -158,7 +158,7 @@ def _get_latest_tag() -> str | None:
         return None
 
 
-@lru_cache(maxsize=None)
+@cache
 def _url_exists(url: str) -> bool:
     try:
         response = requests.head(url, timeout=5)

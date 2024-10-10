@@ -6,14 +6,10 @@ from __future__ import annotations
 import os
 import re
 import sys
-from functools import lru_cache
+from functools import cache
+from importlib.metadata import PackageNotFoundError, version
 
 from colorama import Fore, Style
-
-if sys.version_info < (3, 8):
-    from importlib_metadata import version
-else:
-    from importlib.metadata import version
 
 __DEFAULT_BRANCH = "main"
 __VERSION_REMAPPING: dict[str, dict[str, str]] = {}
@@ -59,14 +55,24 @@ def pin(
 ) -> str:
     if version_remapping is None:
         version_remapping = __VERSION_REMAPPING
+    package_name = package_name.lower()
+    installed_version = _get_version_from_constraints(package_name)
+    if installed_version is None:
+        try:
+            installed_version = version(package_name)
+        except PackageNotFoundError:
+            return "stable"
+    remapped_versions = version_remapping.get(package_name)
+    if remapped_versions is None:
+        return installed_version
+    return remapped_versions.get(installed_version, installed_version)
+
+
+def _get_version_from_constraints(package_name: str) -> str | None:
     python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
     constraints_path = f"../.constraints/py{python_version}.txt"
     if not os.path.exists(constraints_path):
-        msg = (
-            f"Could not find {constraints_path}. Did you pin your constraints with"
-            " https://github.com/ComPWA/update-pip-constraints?"
-        )
-        raise FileNotFoundError(msg)
+        return None
     with open(constraints_path) as stream:
         constraints = stream.read()
     package_name = package_name.lower()
@@ -82,14 +88,8 @@ def pin(
         if len(line_segments) != 2:  # noqa: PLR2004
             continue
         _, installed_version, *_ = line_segments
-        installed_version = installed_version.strip()
-        remapped_versions = version_remapping.get(package_name)
-        if remapped_versions is not None:
-            existing_version = remapped_versions.get(installed_version)
-            if existing_version is not None:
-                return existing_version
-        return installed_version
-    return "stable"
+        return installed_version.strip()
+    return None
 
 
 def pin_minor(package_name: str) -> str:
@@ -141,7 +141,7 @@ def set_intersphinx_version_remapping(
     __VERSION_REMAPPING.update(version_remapping)
 
 
-@lru_cache(maxsize=None)
+@cache
 def print_once(message: str, *, color: str = Fore.RED) -> None:
     colored_text = f"{color}{message}{Style.RESET_ALL}"
     print(colored_text)  # noqa: T201

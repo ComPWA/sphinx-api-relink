@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import shutil
-import sys
+from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -12,11 +12,6 @@ from sphinx.addnodes import pending_xref, pending_xref_condition
 from sphinx.ext.apidoc import main as sphinx_apidoc
 
 from sphinx_api_relink.linkcode import get_linkcode_resolve
-
-if sys.version_info < (3, 8):
-    from importlib_metadata import version
-else:
-    from importlib.metadata import version
 
 __SPHINX_VERSION = tuple(int(i) for i in version("sphinx").split(".") if i.isdigit())
 if __SPHINX_VERSION < (7, 3):

@@ -16,8 +16,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python",
     "Topic :: Documentation",
@@ -25,11 +23,9 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "Sphinx>=4.4",
     "colorama",
     "docutils",
-    'importlib-metadata; python_version <"3.8.0"',
-    'typing-extensions; python_version <"3.8.0"',
+    "sphinx",
 ]
 description = "Relink type hints in your Sphinx API"
 dynamic = ["version"]
@@ -42,13 +38,13 @@ keywords = [
 license = {text = "BSD 3-Clause License"}
 maintainers = [{email = "compwa-admin@ep1.rub.de"}]
 name = "sphinx-api-relink"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 
 [project.optional-dependencies]
 dev = ["sphinx-api-relink[sty]"]
 sty = [
     "mypy",
-    "pre-commit >=1.4.0",
+    "pre-commit",
     "ruff",
     "sphinx-api-relink[types]",
 ]

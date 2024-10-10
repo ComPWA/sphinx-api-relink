@@ -23,9 +23,9 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "Sphinx>=4.4",
     "colorama",
     "docutils",
+    "sphinx",
 ]
 description = "Relink type hints in your Sphinx API"
 dynamic = ["version"]
@@ -44,7 +44,7 @@ requires-python = ">=3.9"
 dev = ["sphinx-api-relink[sty]"]
 sty = [
     "mypy",
-    "pre-commit >=1.4.0",
+    "pre-commit",
     "ruff",
     "sphinx-api-relink[types]",
 ]

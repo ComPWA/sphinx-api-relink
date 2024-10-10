@@ -7,13 +7,9 @@ import os
 import re
 import sys
 from functools import cache
+from importlib.metadata import version
 
 from colorama import Fore, Style
-
-if sys.version_info < (3, 8):
-    from importlib_metadata import version
-else:
-    from importlib.metadata import version
 
 __DEFAULT_BRANCH = "main"
 __VERSION_REMAPPING: dict[str, dict[str, str]] = {}

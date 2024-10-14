@@ -37,8 +37,7 @@
   "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
   "files.associations": {
-    "**/pixi.lock": "yaml",
-    "*.rst_t": "jinja"
+    "**/pixi.lock": "yaml"
   },
   "files.watcherExclude": {
     "**/*_cache/**": true,

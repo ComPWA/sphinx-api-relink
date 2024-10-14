@@ -18,7 +18,6 @@
     "**/.cspell.json",
     ".editorconfig",
     ".envrc",
-    ".gitattributes",
     ".gitignore",
     ".pre-commit-config.yaml",
     ".prettierignore",
@@ -52,7 +51,8 @@
     "refuri",
     "rtfd",
     "srcdir",
-    "templatedir"
+    "templatedir",
+    "venv"
   ],
   "enableFiletypes": [
     "git-commit",

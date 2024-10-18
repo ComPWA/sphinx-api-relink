@@ -30,7 +30,6 @@ version.py
 
 # Temporary files
 *.pyc
-*condaenv.*
 .coverage
 .coverage.*
 .ipynb_checkpoints/
@@ -42,9 +41,9 @@ prof/
 
 # Virtual environments
 *venv/
-.pixi/
 .tox/
 pyvenv*/
+uv.lock
 
 # Settings
 .idea/
@@ -60,5 +59,4 @@ pyvenv*/
 !.readthedocs.yml
 !.vscode/*.json
 !codecov.yml
-!environment.yml
 !pyrightconfig.json

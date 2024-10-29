@@ -57,9 +57,6 @@ dev = [
 ]
 style = [
     "mypy",
-    {include-group = "types"},
-]
-types = [
     "types-colorama",
     "types-docutils",
     "types-requests",

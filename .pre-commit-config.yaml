@@ -17,7 +17,6 @@ repos:
       - id: check-dev-files
         args:
           - --repo-name=sphinx-api-relink
-          - --repo-title=sphinx-api-relink
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.7.1

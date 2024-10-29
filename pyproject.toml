@@ -44,7 +44,6 @@ requires-python = ">=3.9"
 dev = ["sphinx-api-relink[sty]"]
 sty = [
     "mypy",
-    "pre-commit-uv",
     "ruff",
     "sphinx-api-relink[types]",
 ]

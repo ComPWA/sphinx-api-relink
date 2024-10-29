@@ -40,20 +40,6 @@ maintainers = [{email = "compwa-admin@ep1.rub.de"}]
 name = "sphinx-api-relink"
 requires-python = ">=3.9"
 
-[project.optional-dependencies]
-dev = ["sphinx-api-relink[sty]"]
-sty = [
-    "mypy",
-    "pre-commit-uv",
-    "ruff",
-    "sphinx-api-relink[types]",
-]
-types = [
-    "types-colorama",
-    "types-docutils",
-    "types-requests",
-]
-
 [project.readme]
 content-type = "text/markdown"
 file = "README.md"
@@ -63,6 +49,18 @@ Changelog = "https://github.com/ComPWA/sphinx-api-relink/releases"
 Documentation = "https://github.com/ComPWA/sphinx-api-relink/blob/main/README.md"
 Source = "https://github.com/ComPWA/sphinx-api-relink"
 Tracker = "https://github.com/ComPWA/sphinx-api-relink/issues"
+
+[dependency-groups]
+dev = [
+    "ruff",
+    {include-group = "style"},
+]
+style = [
+    "mypy",
+    "types-colorama",
+    "types-docutils",
+    "types-requests",
+]
 
 [tool.setuptools]
 include-package-data = true

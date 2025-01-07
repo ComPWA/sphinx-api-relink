@@ -59,7 +59,6 @@
     "mypy",
     "PyPA",
     "pyproject",
-    "PYTHONHASHSEED",
     "SymPy"
   ]
 }

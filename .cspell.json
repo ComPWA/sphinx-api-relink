@@ -60,5 +60,6 @@
     "github-actions-workflow",
     "julia",
     "jupyter"
-  ]
+  ],
+  "useGitignore": true
 }

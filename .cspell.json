@@ -1,5 +1,10 @@
 {
-  "version": "0.2",
+  "enableFiletypes": [
+    "git-commit",
+    "github-actions-workflow",
+    "julia",
+    "jupyter"
+  ],
   "flagWords": [
     "analyse",
     "colour",
@@ -21,23 +26,9 @@
     ".gitignore",
     ".pre-commit-config.yaml",
     ".prettierignore",
+    ".taplo.toml",
     ".vscode/*",
     "pyproject.toml"
-  ],
-  "language": "en-US",
-  "words": [
-    "ampform",
-    "apidoc",
-    "autoapi",
-    "autodoc",
-    "ComPWA",
-    "conda",
-    "intersphinx",
-    "mypy",
-    "PyPA",
-    "pyproject",
-    "PYTHONHASHSEED",
-    "SymPy"
   ],
   "ignoreWords": [
     "PyPI",
@@ -55,10 +46,20 @@
     "templatedir",
     "venv"
   ],
-  "enableFiletypes": [
-    "git-commit",
-    "github-actions-workflow",
-    "julia",
-    "jupyter"
+  "language": "en-US",
+  "useGitignore": true,
+  "version": "0.2",
+  "words": [
+    "ampform",
+    "apidoc",
+    "autoapi",
+    "autodoc",
+    "ComPWA",
+    "conda",
+    "intersphinx",
+    "mypy",
+    "PyPA",
+    "pyproject",
+    "SymPy"
   ]
 }

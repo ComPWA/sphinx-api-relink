@@ -96,16 +96,6 @@ show_error_codes = true
 warn_unused_configs = true
 
 [tool.pyright]
-exclude = [
-    "**/.git",
-    "**/.ipynb_checkpoints",
-    "**/.mypy_cache",
-    "**/.pytest_cache",
-    "**/.tox",
-    "**/.venv/",
-    "**/__pycache__",
-    "**/_build",
-]
 reportGeneralTypeIssues = false
 reportMissingImports = false
 reportMissingParameterType = false

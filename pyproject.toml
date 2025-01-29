@@ -16,6 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python",
     "Topic :: Documentation",
@@ -78,8 +79,6 @@ namespaces = false
 where = ["src"]
 
 [tool.setuptools_scm]
-local_scheme = "no-local-version"
-version_scheme = "only-version"
 write_to = "src/version.py"
 
 [tool.coverage.run]
@@ -97,16 +96,6 @@ show_error_codes = true
 warn_unused_configs = true
 
 [tool.pyright]
-exclude = [
-    "**/.git",
-    "**/.ipynb_checkpoints",
-    "**/.mypy_cache",
-    "**/.pytest_cache",
-    "**/.tox",
-    "**/.venv/",
-    "**/__pycache__",
-    "**/_build",
-]
 reportGeneralTypeIssues = false
 reportMissingImports = false
 reportMissingParameterType = false
@@ -122,6 +111,8 @@ reportUnusedFunction = true
 reportUnusedImport = true
 reportUnusedVariable = true
 typeCheckingMode = "strict"
+venv = ".venv"
+venvPath = "."
 
 [tool.ruff]
 preview = true

@@ -195,7 +195,7 @@ def _get_env_kwargs(env: BuildEnvironment) -> dict:
 
 
 def _create_nodes(env: BuildEnvironment, title: str) -> list[nodes.Node]:
-    short_name = title.split(".")[-1]
+    short_name = title.rsplit(".", maxsplit=1)[-1]
     if env.config.python_use_unqualified_type_names:
         return [
             pending_xref_condition("", short_name, condition="resolved"),

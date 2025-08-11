@@ -68,7 +68,7 @@ def _get_path(domain: str, info: LinkcodeInfo, debug: bool) -> str | None:
 
 @cache
 def _get_package(module_name: str) -> ModuleType:
-    package_name = module_name.split(".")[0]
+    package_name = module_name.split(".", maxsplit=1)[0]
     return __get_module(package_name)
 
 
@@ -135,7 +135,7 @@ def get_blob_url(github_repo: str) -> str:
 
 @lru_cache(maxsize=1)
 def _get_commit_sha() -> str:
-    result = subprocess.run(  # noqa: S603
+    result = subprocess.run(
         ["git", "rev-parse", "HEAD"],  # noqa: S607
         capture_output=True,
         check=True,
@@ -147,7 +147,7 @@ def _get_commit_sha() -> str:
 
 def _get_latest_tag() -> str | None:
     try:
-        result = subprocess.check_output(  # noqa: S603
+        result = subprocess.check_output(
             ["git", "describe", "--tags", "--exact-match"],  # noqa: S607
             stderr=subprocess.PIPE,
             universal_newlines=True,

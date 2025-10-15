@@ -7,7 +7,7 @@ import subprocess
 import sys
 from functools import cache, lru_cache
 from os.path import dirname, relpath
-from typing import TYPE_CHECKING, Any, Callable, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 from urllib.parse import quote
 
 import requests
@@ -16,6 +16,7 @@ from colorama import Fore
 from sphinx_api_relink.helpers import print_once
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from types import ModuleType
 
 

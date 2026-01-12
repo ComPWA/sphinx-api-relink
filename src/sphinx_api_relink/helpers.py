@@ -50,11 +50,7 @@ def get_package_version(package_name: str) -> str:
     return ".".join(v.split(".")[:3])
 
 
-def pin(
-    package_name: str, version_remapping: dict[str, dict[str, str]] | None = None
-) -> str:
-    if version_remapping is None:
-        version_remapping = __VERSION_REMAPPING
+def pin(package_name: str) -> str:
     package_name = package_name.lower()
     installed_version = _get_version_from_constraints(package_name)
     if installed_version is None:
@@ -62,10 +58,15 @@ def pin(
             installed_version = version(package_name)
         except PackageNotFoundError:
             return "stable"
-    remapped_versions = version_remapping.get(package_name)
-    if remapped_versions is None:
-        return installed_version
-    return remapped_versions.get(installed_version, installed_version)
+    return _remap_version(package_name, installed_version)
+
+
+def _remap_version(package: str, version: str) -> str:
+    remapping = __VERSION_REMAPPING.get(package, {})
+    for pattern, replacement in remapping.items():
+        if re.match(pattern, version):
+            return replacement
+    return remapping.get(version, version)
 
 
 def _get_version_from_constraints(package_name: str) -> str | None:

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import inspect
-import subprocess
 import sys
 from functools import cache, lru_cache
 from os.path import dirname, relpath
@@ -13,7 +12,11 @@ from urllib.parse import quote
 import requests
 from colorama import Fore
 
-from sphinx_api_relink.helpers import print_once
+from sphinx_api_relink.helpers import (
+    _get_commit_sha,  # pyright: ignore[reportPrivateUsage]
+    _get_latest_tag,  # pyright: ignore[reportPrivateUsage]
+    print_once,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -148,31 +151,6 @@ def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
         " 'api_linkcode_rev' config value in conf.py"
     )
     return url
-
-
-@lru_cache(maxsize=1)
-def _get_commit_sha() -> str:
-    result = subprocess.run(
-        ["git", "rev-parse", "HEAD"],  # noqa: S607
-        capture_output=True,
-        check=True,
-        text=True,
-    )
-    commit_hash = result.stdout.strip()
-    return commit_hash[:7]
-
-
-def _get_latest_tag() -> str | None:
-    try:
-        result = subprocess.check_output(
-            ["git", "describe", "--tags", "--exact-match"],  # noqa: S607
-            stderr=subprocess.PIPE,
-            universal_newlines=True,
-        )
-
-        return result.strip()
-    except subprocess.CalledProcessError:
-        return None
 
 
 @cache

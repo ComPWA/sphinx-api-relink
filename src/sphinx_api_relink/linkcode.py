@@ -26,13 +26,13 @@ class LinkcodeInfo(TypedDict, total=True):
 
 
 def get_linkcode_resolve(
-    github_repo: str, debug: bool
+    github_repo: str, *, debug: bool, rev: str | None = None
 ) -> Callable[[str, LinkcodeInfo], str | None]:
     def linkcode_resolve(domain: str, info: LinkcodeInfo) -> str | None:
         path = _get_path(domain, info, debug)
         if path is None:
             return None
-        blob_url = get_blob_url(github_repo)
+        blob_url = get_blob_url(github_repo, rev=rev)
         if debug:
             msg = f"  {info['fullname']} --> {blob_url}/src/{path}"
             print_once(msg, color=Fore.BLUE)
@@ -112,9 +112,11 @@ def _get_object_from_module(module_name: str, fullname: str) -> Any | None:
 
 
 @lru_cache(maxsize=1)
-def get_blob_url(github_repo: str) -> str:
-    ref = _get_commit_sha()
+def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
     repo_url = f"https://github.com/{github_repo}"
+    if rev:
+        return f"{repo_url}/blob/{rev}"
+    ref = _get_commit_sha()
     blob_url = f"{repo_url}/blob/{ref}"
     if _url_exists(blob_url):
         return blob_url

@@ -1,4 +1,10 @@
-"""Helper functions for your :file:`conf.py` Sphinx configuration file."""
+"""Helper functions for your :file:`conf.py` Sphinx configuration file.
+
+To have interlinked APIs that remain correct in older versions of your documentation
+(see :doc:`versioning on Read the Docs <readthedocs:versions>`), it is important to link
+against pinned versions of external packages. Many of these functions are useful for the
+configuration options of the :mod:`~sphinx.ext.intersphinx` extension.
+"""
 
 # pyright: reportUnnecessaryIsInstance=false
 from __future__ import annotations
@@ -17,10 +23,13 @@ __VERSION_REMAPPING: dict[str, dict[str, str]] = {}
 
 
 def get_branch_name() -> str:
-    """Get the branch name from the environment for GitHub or Read the Docs.
+    """Get the branch name from the environment in a CI job.
 
-    See https://docs.readthedocs.io/en/stable/builds.html and
-    https://docs.github.com/en/actions/learn-github-actions/variables.
+    See :envvar:`READTHEDOCS_VERSION` and `GITHUB_REF
+    <https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context>`_
+    on GitHub Docs.
+
+    .. seealso:: :func:`get_git_revision` for a more robust alternative that also works locally.
     """
     branch_name = os.environ.get("READTHEDOCS_VERSION")
     if branch_name == "latest":
@@ -37,6 +46,19 @@ def get_branch_name() -> str:
 
 
 def get_execution_mode() -> str:
+    """Get the Jupyter notebook execution mode from environment variables.
+
+    Returns ``"force"`` if the ``FORCE_EXECUTE_NB`` environment variable is set,
+    ``"cache"`` if the ``EXECUTE_NB`` environment variable is set, and ``"off"``
+    otherwise. You can use this to set the :doc:`nb_execution_mode
+    <myst_nb:configuration>` option for the :doc:`MyST-NB <myst_nb:index>` package.
+
+    .. code-block:: python
+
+        from sphinx_api_relink.helpers import get_execution_mode
+
+        nb_execution_mode = get_execution_mode()
+    """
     if "FORCE_EXECUTE_NB" in os.environ:
         print("\033[93;1mWill run ALL Jupyter notebooks!\033[0m")  # noqa: T201
         return "force"
@@ -46,15 +68,39 @@ def get_execution_mode() -> str:
 
 
 def get_git_revision(*, prefer_branch: bool = False) -> str:
-    """Get the current Git revision (branch, tag, or commit SHA).
+    """Get the current Git revision (branch, tag, or commit SHA) in your local repository.
 
-    This is useful as an alternative to :func:`get_branch_name` in a :file:`conf.py`
-    file to link to the correct version. For instance:
+    This is a more robust alternative to :func:`get_branch_name` that also works locally
+    or with private GitHub repositories. It can for instance be used to set the
+    :confval:`api_linkcode_rev` option.
 
     .. code-block:: python
+
         from sphinx_api_relink.helpers import get_git_revision
 
         api_linkcode_rev = get_git_revision()
+
+    Another example is to use this function to set the :ref:`repository_branch
+    <sphinx_book_theme:source-buttons:source>` option of the :doc:`Sphinx Book Theme
+    <sphinx_book_theme:index>`.
+
+    .. code-block:: python
+
+        from sphinx_api_relink.helpers import get_git_revision
+
+        html_theme_options = {
+            "repository_branch": get_git_revision(prefer_branch=True),
+            "use_edit_page_button": True,
+        }
+
+    :param prefer_branch:
+
+        If `True`, return the current branch name if no tag is found. If `False`, return
+        the commit SHA if no tag is found. In the :confval:`html_theme_options` example
+        above, we chose to prefer the branch name, because that makes more sense for
+        editing pages on GitHub.
+
+        .. seealso:: https://github.com/ComPWA/sphinx-api-relink/issues/22
     """
     tag = _get_latest_tag()
     if tag is not None:
@@ -105,12 +151,34 @@ def _get_latest_tag() -> str | None:
 
 
 def get_package_version(package_name: str) -> str:
-    """Get the version (MAJOR.MINOR.PATCH) of a Python package."""
+    """Get the version of a Python package using :func:`importlib.metadata.version`.
+
+    The version is returned in the full MAJOR.MINOR.PATCH format.
+
+    .. code-block:: python
+
+        from sphinx_api_relink.helpers import get_package_version
+
+        version = get_package_version("sphinx-api-relink")
+    """
     v = version(package_name)
     return ".".join(v.split(".")[:3])
 
 
 def pin(package_name: str) -> str:
+    """Get the version number of a package based on constraints or installed version.
+
+    This is useful when setting the :confval:`intersphinx_mapping` in your :doc:`Sphinx
+    configuration <sphinx:usage/configuration>`:
+
+    .. code-block:: python
+
+        from sphinx_api_relink.helpers import pin
+
+        intersphinx_mapping = {
+            "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
+        }
+    """
     package_name = package_name.lower()
     installed_version = _get_version_from_constraints(package_name)
     if installed_version is None:
@@ -154,6 +222,19 @@ def _get_version_from_constraints(package_name: str) -> str | None:
 
 
 def pin_minor(package_name: str) -> str:
+    """Get the version of a package with only the MAJOR.MINOR components.
+
+    Some packages use documentation URLs that only specify the MAJOR.MINOR version. An
+    example is the NumPy API (e.g. https://numpy.org/doc/1.24).
+
+    .. code-block:: python
+
+        from sphinx_api_relink.helpers import pin_minor
+
+        intersphinx_mapping = {
+            "numpy": (f"https://numpy.org/doc/{pin_minor('numpy')}", None),
+        }
+    """
     installed_version = pin(package_name)
     if installed_version == "stable":
         return installed_version
@@ -167,6 +248,30 @@ def pin_minor(package_name: str) -> str:
 def set_intersphinx_version_remapping(
     version_remapping: dict[str, dict[str, str]],
 ) -> None:
+    """Remap versions returned by the :func:`pin` and :func:`pin_minor` functions.
+
+    Since the :func:`pin` and :func:`pin_minor` functions return the installed version
+    of a package, it may be necessary to remap certain versions to match the versions
+    used in the documentation URLs of external packages, in particular when those
+    packages have not yet released the API website for a specific release.
+
+    This function has to be called in the :file:`conf.py` file before using the
+    :func:`pin` and :func:`pin_minor` functions.
+
+    .. code-block:: python
+
+
+        from sphinx_api_relink.helpers import set_intersphinx_version_remapping
+
+        set_intersphinx_version_remapping({
+            "ipython": {
+                "8.12.2": "8.12.1",
+                "8.12.3": "8.12.1",
+            },
+            "ampform": {"0.15.12.dev.*": "0.15.11"},
+        })
+
+    """
     if not isinstance(version_remapping, dict):
         msg = (
             "intersphinx_relink_versions must be a dict, got a"
@@ -204,5 +309,17 @@ def set_intersphinx_version_remapping(
 
 @cache
 def print_once(message: str, *, color: str = Fore.RED) -> None:
+    """Prints a message to the console only once, with optional color formatting.
+
+    Colors can be specified using ANSI escape codes from the
+    https://github.com/tartley/colorama library. The default color is red.
+
+    .. code-block:: python
+
+        from colorama import Fore
+        from sphinx_api_relink.helpers import print_once
+
+        print_once("This is an important message!", color=Fore.GREEN)
+    """
     colored_text = f"{color}{message}{Style.RESET_ALL}"
     print(colored_text)  # noqa: T201

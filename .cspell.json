@@ -21,6 +21,7 @@
   "ignorePaths": [
     "**/*.rst.jinja",
     "**/.cspell.json",
+    "*.ico",
     ".editorconfig",
     ".envrc",
     ".gitignore",
@@ -28,11 +29,13 @@
     ".prettierignore",
     ".taplo.toml",
     ".vscode/*",
+    "docs/conf.py",
     "pyproject.toml"
   ],
   "ignoreWords": [
     "PyPI",
     "commitlint",
+    "confval",
     "linkcode",
     "prereleased",
     "redef",
@@ -42,8 +45,10 @@
     "reftype",
     "refuri",
     "rtfd",
+    "seealso",
     "srcdir",
     "templatedir",
+    "toctree",
     "venv"
   ],
   "language": "en-US",

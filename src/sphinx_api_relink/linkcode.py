@@ -23,14 +23,11 @@ if TYPE_CHECKING:
     from types import ModuleType
 
 
-class LinkcodeInfo(TypedDict, total=True):
-    module: str
-    fullname: str
-
-
 def get_linkcode_resolve(
     github_repo: str, *, debug: bool, rev: str | None = None
 ) -> Callable[[str, LinkcodeInfo], str | None]:
+    """Get a :confval:`linkcode_resolve` function for the given :confval:`api_github_repo`."""
+
     def linkcode_resolve(domain: str, info: LinkcodeInfo) -> str | None:
         path = _get_path(domain, info, debug)
         if path is None:
@@ -42,6 +39,13 @@ def get_linkcode_resolve(
         return f"{blob_url}/src/{path}"
 
     return linkcode_resolve
+
+
+class LinkcodeInfo(TypedDict, total=True):
+    """A `TypedDict` for the signature of the function given to :confval:`linkcode_resolve`."""
+
+    module: str
+    fullname: str
 
 
 def _get_path(domain: str, info: LinkcodeInfo, debug: bool) -> str | None:
@@ -116,6 +120,14 @@ def _get_object_from_module(module_name: str, fullname: str) -> Any | None:
 
 @lru_cache(maxsize=1)
 def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
+    """Get the base URL for blobs in the given GitHub repository.
+
+    If :code:`rev` is provided, it is used directly. Otherwise, several attempts are
+    made to determine a valid Git ref (commit SHA, tag, or branch) that exists in the
+    repository.
+
+    .. warning:: This function makes network requests to GitHub to verify the existence of URLs.
+    """
     repo_url = f"https://github.com/{github_repo}"
     if rev:
         return f"{repo_url}/blob/{rev}"

@@ -6,7 +6,6 @@ against pinned versions of external packages. Many of these functions are useful
 configuration options of the :mod:`~sphinx.ext.intersphinx` extension.
 """
 
-# pyright: reportUnnecessaryIsInstance=false
 from __future__ import annotations
 
 import os

@@ -12,7 +12,7 @@ import os
 import re
 import subprocess
 import sys
-from functools import cache, lru_cache
+from functools import cache
 from importlib.metadata import PackageNotFoundError, version
 
 from colorama import Fore, Style
@@ -124,7 +124,7 @@ def _get_branch() -> str | None:
     return branch_name
 
 
-@lru_cache(maxsize=1)
+@cache
 def _get_commit_sha() -> str:
     result = subprocess.run(
         ["git", "rev-parse", "HEAD"],  # noqa: S607

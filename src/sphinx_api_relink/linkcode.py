@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import inspect
 import sys
-from functools import cache, lru_cache
+from functools import cache
 from os.path import dirname, relpath
 from typing import TYPE_CHECKING, Any, TypedDict
 from urllib.parse import quote
@@ -114,7 +114,7 @@ def _get_object_from_module(module_name: str, fullname: str) -> Any | None:
     return obj
 
 
-@lru_cache(maxsize=1)
+@cache
 def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
     """Get the base URL for blobs in the given GitHub repository.
 

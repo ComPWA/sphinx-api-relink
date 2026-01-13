@@ -46,7 +46,16 @@ def get_execution_mode() -> str:
 
 
 def get_git_revision(*, prefer_branch: bool = False) -> str:
-    """Get the current Git revision (tag or commit SHA)."""
+    """Get the current Git revision (branch, tag, or commit SHA).
+
+    This is useful as an alternative to :func:`get_branch_name` in a :file:`conf.py`
+    file to link to the correct version. For instance:
+
+    .. code-block:: python
+        from sphinx_api_relink.helpers import get_git_revision
+
+        api_linkcode_rev = get_git_revision()
+    """
     tag = _get_latest_tag()
     if tag is not None:
         return tag

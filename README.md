@@ -55,7 +55,7 @@ The extension can also link to the source code on GitHub through the [`sphinx.ex
 api_github_repo: str = "ComPWA/sphinx-api-relink"
 ```
 
-Set `api_linkcode_debug = True` to print the generated URLs to the console.
+Set `api_linkcode_debug = True` to print the generated URLs to the console and `api_linkcode_rev = "main"` to disable determining the branch, tag, or commit SHA automatically.
 
 ## Generate API
 

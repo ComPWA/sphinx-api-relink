@@ -31,6 +31,7 @@ if TYPE_CHECKING:
 def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("api_github_repo", default=None, rebuild="env")
     app.add_config_value("api_linkcode_debug", default=False, rebuild="env")
+    app.add_config_value("api_linkcode_rev", default="", rebuild="env")
     app.add_config_value("api_target_substitutions", default={}, rebuild="env")
     app.add_config_value("api_target_types", default={}, rebuild="env")
     app.add_config_value("generate_apidoc_directory", default="api", rebuild="env")
@@ -51,8 +52,11 @@ def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
     github_repo: str | None = app.config.api_github_repo
     if github_repo is None:
         return
-    debug: bool = app.config.api_linkcode_debug
-    app.config.linkcode_resolve = get_linkcode_resolve(github_repo, debug)  # type:ignore[attr-defined]
+    app.config.linkcode_resolve = get_linkcode_resolve(
+        github_repo,
+        debug=app.config.api_linkcode_debug,
+        rev=app.config.api_linkcode_rev,
+    )
     app.setup_extension("sphinx.ext.linkcode")
 
 

@@ -5,8 +5,9 @@ from __future__ import annotations
 
 import os
 import re
+import subprocess
 import sys
-from functools import cache
+from functools import cache, lru_cache
 from importlib.metadata import PackageNotFoundError, version
 
 from colorama import Fore, Style
@@ -42,6 +43,56 @@ def get_execution_mode() -> str:
     if "EXECUTE_NB" in os.environ:
         return "cache"
     return "off"
+
+
+def get_git_revision(*, prefer_branch: bool = False) -> str:
+    """Get the current Git revision (tag or commit SHA)."""
+    tag = _get_latest_tag()
+    if tag is not None:
+        return tag
+    if prefer_branch:
+        branch = _get_branch()
+        if branch is not None:
+            return branch
+    return _get_commit_sha()
+
+
+def _get_branch() -> str | None:
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],  # noqa: S607
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    branch_name = result.stdout.strip()
+    if branch_name == "HEAD":
+        return None
+    return branch_name
+
+
+@lru_cache(maxsize=1)
+def _get_commit_sha() -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],  # noqa: S607
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    commit_hash = result.stdout.strip()
+    return commit_hash[:7]
+
+
+def _get_latest_tag() -> str | None:
+    try:
+        result = subprocess.check_output(
+            ["git", "describe", "--tags", "--exact-match"],  # noqa: S607
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+
+        return result.strip()
+    except subprocess.CalledProcessError:
+        return None
 
 
 def get_package_version(package_name: str) -> str:

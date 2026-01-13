@@ -1,4 +1,85 @@
-# pyright: reportAttributeAccessIssue=false
+"""Helper functions for Sphinx API documentation relinking.
+
+The following options can be set in your :doc:`Sphinx configuration file
+<sphinx:usage/configuration>` to steer the behavior of the the :mod:`sphinx_api_relink`
+extension.
+
+API documentation generation
+----------------------------
+
+.. confval:: generate_apidoc_package_path
+    :type: ``str | list[str]``
+
+    If you set this option with the path to your package(s), the extension will
+    automatically generate API documentation using :mod:`sphinx.ext.apidoc` when the
+    Sphinx build starts.
+
+.. confval:: generate_apidoc_directory
+    :type: ``str``
+    :default: ``"api"``
+
+    The directory where the API documentation will be generated when using the
+    :mod:`sphinx.ext.apidoc` module. This directory is relative to the Sphinx source
+    directory. For this option to take effect, you must also set the
+    :confval:`generate_apidoc_package_path` option.
+
+.. confval:: generate_apidoc_excludes
+    :type: ``list[str]``
+
+    A list of paths to submodules modules that should be excluded when generating the
+    API documentation. The paths are relative to the package path(s) specified in the
+    :confval:`generate_apidoc_package_path` option.
+
+.. confval:: generate_apidoc_use_compwa_template
+    :type: ``bool``
+    :default: ``True``
+
+    If set to `True`, the extension will use a `custom template
+    <https://github.com/ComPWA/sphinx-api-relink/tree/main/src/sphinx_api_relink/templates>`_
+    for generating the API. See :doc:`this page <ampform:api/ampform>` for an example of
+    the generated API documentation using the :doc:`Sphinx Book Theme
+    <sphinx_book_theme:index>`.
+
+
+Intersphinx relinking
+---------------------
+
+.. confval:: api_github_repo
+    :type: ``str``
+
+    The GitHub repository in the format ``"Organization/Repository"`` where your source
+    code is hosted. If you set this option, the extension will link to the source code
+    on GitHub from the documentation using the :mod:`sphinx.ext.linkcode` extension
+    through its :confval:`linkcode_resolve` configuration option.
+
+.. confval:: api_linkcode_rev
+    :type: ``str``
+
+    The Git revision (branch, tag, or commit SHA) to link to in the source code
+    repository. This is used by the :mod:`sphinx.ext.linkcode` extension to generate
+    correct links to the source code. If not set, the Git revision is determined
+    automatically by trying the commit SHA, branch name, or latest tag and checking if
+    its blob is available on GitHub.
+
+    .. tip::
+        :func:`.get_git_revision` and :func:`.get_branch_name` can be used to
+        programmatically get the current Git revision or determine the branch name in CI jobs.
+
+.. confval:: api_target_substitutions
+    :type: ``dict[str, str | tuple[str, str]]``
+
+    This option allows you to specify substitutions for type hint references in your API
+    documentation. The keys are the original type hints, and the values are either the
+    target reference as a string or a tuple containing the target type and reference.
+
+.. confval:: api_target_types
+    :type: ``dict[str, str]``
+
+    This option allows you to specify the reference type for specific type hints in your
+    API documentation. The keys are the type hints, and the values are the desired
+    reference types (e.g., ``"obj"``, ``"class"``, etc.).
+"""
+
 from __future__ import annotations
 
 import shutil
@@ -38,17 +119,17 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("generate_apidoc_excludes", default=None, rebuild="env")
     app.add_config_value("generate_apidoc_package_path", default=None, rebuild="env")
     app.add_config_value("generate_apidoc_use_compwa_template", True, rebuild="env")
-    app.connect("config-inited", set_linkcode_resolve)
-    app.connect("config-inited", generate_apidoc)
-    app.connect("config-inited", replace_type_to_xref)
-    app.add_role("wiki", wiki_role("https://en.wikipedia.org/wiki/%s"))
+    app.connect("config-inited", _set_linkcode_resolve)
+    app.connect("config-inited", _generate_apidoc)
+    app.connect("config-inited", _replace_type_to_xref)
+    app.add_role("wiki", _wiki_role("https://en.wikipedia.org/wiki/%s"))
     return {
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }
 
 
-def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
+def _set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
     github_repo: str | None = app.config.api_github_repo
     if github_repo is None:
         return
@@ -60,7 +141,7 @@ def set_linkcode_resolve(app: Sphinx, _: BuildEnvironment) -> None:
     app.setup_extension("sphinx.ext.linkcode")
 
 
-def generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:
+def _generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:
     config_key = "generate_apidoc_package_path"
     package_path: list[str] | str | None = getattr(app.config, config_key, None)
     if package_path is None:
@@ -73,7 +154,7 @@ def generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:
         package_dirs = package_path
     for rel_dir in package_dirs:
         abs_package_path = Path(app.srcdir) / rel_dir
-        _run_sphinx_apidoc(
+        __run_sphinx_apidoc(
             abs_package_path,
             apidoc_dir,
             excludes=app.config.generate_apidoc_excludes,
@@ -81,11 +162,11 @@ def generate_apidoc(app: Sphinx, _: BuildEnvironment) -> None:
         )
 
 
-def _run_sphinx_apidoc(
+def __run_sphinx_apidoc(
     package_path: Path,
-    apidoc_dir: str = "api",
-    excludes: list[str] | None = None,
-    use_compwa_template: bool = True,
+    apidoc_dir: str,
+    excludes: list[str] | None,
+    use_compwa_template: bool,
 ) -> None:
     if not package_path.exists():
         msg = f"Package under {package_path} does not exist"
@@ -109,7 +190,7 @@ def _run_sphinx_apidoc(
     sphinx_apidoc(args)
 
 
-def replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
+def _replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
     target_substitutions = _get_target_substitutions(app)
     ref_targets = {
         k: v if isinstance(v, str) else v[1] for k, v in target_substitutions.items()
@@ -143,7 +224,7 @@ def replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
     if __SPHINX_VERSION < (7, 3):
         sphinx.domains.python.type_to_xref = _new_type_to_xref  # pyright:ignore[reportPrivateImportUsage]
     else:
-        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref  # noqa: SLF001
+        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref  # pyright: ignore[reportAttributeAccessIssue] # noqa: SLF001
 
 
 def _get_target_substitutions(app: Sphinx) -> dict[str, str | tuple[str, str]]:
@@ -208,7 +289,7 @@ def _create_nodes(env: BuildEnvironment, title: str) -> list[nodes.Node]:
     return [nodes.Text(short_name)]
 
 
-def wiki_role(pattern: str) -> RoleFunction:
+def _wiki_role(pattern: str) -> RoleFunction:
     def role(  # noqa: PLR0913, PLR0917
         name: str,  # noqa: ARG001
         rawtext: str,

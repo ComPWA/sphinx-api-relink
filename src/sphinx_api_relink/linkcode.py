@@ -116,24 +116,38 @@ def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
     repo_url = f"https://github.com/{github_repo}"
     if rev:
         return f"{repo_url}/blob/{rev}"
-    ref = _get_commit_sha()
-    blob_url = f"{repo_url}/blob/{ref}"
-    if _url_exists(blob_url):
-        return blob_url
-    print_once(f"The URL {blob_url} seems not to exist", color=Fore.MAGENTA)
-    tag = _get_latest_tag()
-    if tag is not None:
-        blob_url = f"{repo_url}/blob/{tag}"
-        print_once(f"--> falling back to {blob_url}", color=Fore.MAGENTA)
-        if _url_exists(blob_url):
-            return blob_url
-    blob_url = f"{repo_url}/blob/main"
-    print_once(f"--> falling back to {blob_url}", color=Fore.MAGENTA)
-    if _url_exists(blob_url):
-        return blob_url
-    blob_url = f"{repo_url}/blob/master"
-    print_once(f"--> falling back to {blob_url}", color=Fore.MAGENTA)
-    return blob_url
+    second_attempt = True
+    previous_url = None
+    for try_rev in [
+        _get_commit_sha(),
+        _get_latest_tag(),
+        "master",
+        "main",
+    ]:
+        if try_rev is None:
+            continue
+        url = f"{repo_url}/blob/{try_rev}"
+        if previous_url:
+            if second_attempt:
+                second_attempt = False
+                msg = f"The URL {previous_url} seems not to exist"
+                print_once(msg, color=Fore.MAGENTA)
+            print_once(f"--> falling back to {url}", color=Fore.MAGENTA)
+        if _url_exists(url):
+            if previous_url:
+                print_once(
+                    "Disable this fallback behavior by specifying a branch, tag, or"
+                    " commit SHA with the 'api_linkcode_rev' config value",
+                    color=Fore.MAGENTA,
+                )
+            return url
+        previous_url = url
+    print_once(
+        "Could not determine a valid Git rev for linkcode URLs. Disable this fallback"
+        " behavior by specifying a branch, tag, or commit SHA with the"
+        " 'api_linkcode_rev' config value in conf.py"
+    )
+    return url
 
 
 @lru_cache(maxsize=1)

@@ -12,7 +12,12 @@ from urllib.parse import quote
 import requests
 from colorama import Fore
 
-from sphinx_api_relink.helpers import _get_commit_sha, _get_latest_tag, print_once
+from sphinx_api_relink.helpers import (
+    _get_branch,
+    _get_commit_sha,
+    _get_latest_tag,
+    print_once,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -133,6 +138,7 @@ def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
     for try_rev in [
         _get_commit_sha(),
         _get_latest_tag(),
+        _get_branch(),
         "master",
         "main",
     ]:

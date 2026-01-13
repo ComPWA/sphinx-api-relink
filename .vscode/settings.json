@@ -42,13 +42,12 @@
   "gitlens.telemetry.enabled": false,
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "multiDiffEditor.experimental.enabled": true,
-  "mypy-type-checker.args": ["--config-file=${workspaceFolder}/pyproject.toml"],
   "notebook.codeActionsOnSave": {
     "notebook.source.organizeImports": "explicit"
   },
   "notebook.formatOnSave.enabled": true,
-  "python.analysis.autoImportCompletions": false,
   "python.defaultInterpreterPath": ".venv/bin/python",
+  "python.languageServer": "None",
   "python.terminal.activateEnvironment": false,
   "python.testing.unittestEnabled": false,
   "redhat.telemetry.enabled": false,
@@ -59,5 +58,8 @@
   "search.exclude": {
     "**/uv.lock": true
   },
-  "telemetry.telemetryLevel": "off"
+  "telemetry.telemetryLevel": "off",
+  "ty.completions.autoImport": false,
+  "ty.diagnosticMode": "workspace",
+  "ty.importStrategy": "fromEnvironment"
 }

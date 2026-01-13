@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "astral-sh.ty",
     "charliermarsh.ruff",
     "christian-kohler.path-intellisense",
     "eamodio.gitlens",
@@ -8,9 +9,7 @@
     "github.vscode-github-actions",
     "github.vscode-pull-request-github",
     "mhutchie.git-graph",
-    "ms-python.mypy-type-checker",
     "ms-python.python",
-    "ms-python.vscode-pylance",
     "ms-vscode.live-server",
     "redhat.vscode-yaml",
     "ryanluker.vscode-coverage-gutters",
@@ -29,7 +28,9 @@
     "ms-python.black-formatter",
     "ms-python.flake8",
     "ms-python.isort",
+    "ms-python.mypy-type-checker",
     "ms-python.pylint",
+    "ms-python.vscode-pylance",
     "travisillig.vscode-json-stable-stringify",
     "tyriar.sort-lines"
   ]

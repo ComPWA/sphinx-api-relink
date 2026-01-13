@@ -96,11 +96,9 @@ from sphinx_api_relink.linkcode import get_linkcode_resolve
 
 __SPHINX_VERSION = tuple(int(i) for i in version("sphinx").split(".") if i.isdigit())
 if __SPHINX_VERSION < (7, 3):
-    from sphinx.domains.python import parse_reftarget  # type:ignore[attr-defined]
+    from sphinx.domains.python import parse_reftarget  # ty:ignore[unresolved-import]
 else:
-    from sphinx.domains.python._annotations import (  # type:ignore[import-not-found,no-redef]
-        parse_reftarget,  # noqa: PLC2701
-    )
+    from sphinx.domains.python._annotations import parse_reftarget  # noqa: PLC2701
 
 if TYPE_CHECKING:
     from docutils.parsers.rst.states import Inliner
@@ -202,7 +200,7 @@ def _replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
 
     def _new_type_to_xref(
         target: str,
-        env: BuildEnvironment | None = None,  # type:ignore[assignment]
+        env: BuildEnvironment | None = None,
         suppress_prefix: bool = False,
     ) -> pending_xref:
         reftype, target, title, refspecific = parse_reftarget(target, suppress_prefix)
@@ -222,9 +220,9 @@ def _replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
         )
 
     if __SPHINX_VERSION < (7, 3):
-        sphinx.domains.python.type_to_xref = _new_type_to_xref  # pyright:ignore[reportPrivateImportUsage]
+        sphinx.domains.python.type_to_xref = _new_type_to_xref  # ty:ignore[invalid-assignment]
     else:
-        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref  # pyright: ignore[reportAttributeAccessIssue] # noqa: SLF001
+        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref  # noqa: SLF001  # ty:ignore[invalid-assignment]
 
 
 def _get_target_substitutions(app: Sphinx) -> dict[str, str | tuple[str, str]]:
@@ -307,4 +305,4 @@ def _wiki_role(pattern: str) -> RoleFunction:
         reference_node = nodes.reference(rawtext, output_text, refuri=url, **options)
         return [reference_node], []
 
-    return role  # type:ignore[return-value]
+    return role  # ty:ignore[invalid-return-type]

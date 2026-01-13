@@ -33,11 +33,14 @@
     "pyproject.toml"
   ],
   "ignoreWords": [
+    "MAINT",
     "PyPI",
     "commitlint",
     "confval",
     "linkcode",
+    "poethepoet",
     "prereleased",
+    "redeboer",
     "redef",
     "refdomain",
     "refspecific",
@@ -62,7 +65,6 @@
     "ComPWA",
     "conda",
     "intersphinx",
-    "mypy",
     "PyPA",
     "pyproject",
     "SymPy"

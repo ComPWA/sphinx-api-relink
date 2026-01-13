@@ -53,7 +53,6 @@ Tracker = "https://github.com/ComPWA/sphinx-api-relink/issues"
 
 [dependency-groups]
 dev = [
-    "poethepoet",
     "ruff",
     {include-group = "doc"},
     {include-group = "style"},
@@ -65,7 +64,7 @@ doc = [
     "sphinx-copybutton",
 ]
 style = [
-    "mypy",
+    "ty",
     "types-colorama",
     "types-docutils",
     "types-requests",
@@ -92,16 +91,6 @@ write_to = "src/version.py"
 [tool.coverage.run]
 branch = true
 source = ["src"]
-
-[tool.mypy]
-disallow_incomplete_defs = true
-disallow_untyped_defs = true
-files = [
-    "**/*.py",
-    "**/*.pyi",
-]
-show_error_codes = true
-warn_unused_configs = true
 
 [tool.poe.executor]
 isolated = true
@@ -162,27 +151,8 @@ help = "Check external links in the documentation (requires internet connection)
 
 [tool.poe.tasks.style]
 cmd = "pre-commit run --all-files"
-executor = {group = "style"}
+executor = {isolated = false, no-group = ""}
 help = "Perform all linting, formatting, and spelling checks"
-
-[tool.pyright]
-reportGeneralTypeIssues = false
-reportMissingImports = false
-reportMissingParameterType = false
-reportMissingTypeArgument = false
-reportUnboundVariable = false
-reportUnknownArgumentType = false
-reportUnknownMemberType = false
-reportUnknownParameterType = false
-reportUnknownVariableType = false
-reportUntypedFunctionDecorator = false
-reportUnusedClass = true
-reportUnusedFunction = true
-reportUnusedImport = true
-reportUnusedVariable = true
-typeCheckingMode = "strict"
-venv = ".venv"
-venvPath = "."
 
 [tool.ruff]
 preview = true
@@ -263,3 +233,9 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
+
+[tool.ty.rules]
+division-by-zero = "warn"
+possibly-missing-import = "warn"
+possibly-unresolved-reference = "warn"
+unused-ignore-comment = "warn"

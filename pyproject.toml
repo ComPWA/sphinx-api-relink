@@ -46,10 +46,10 @@ content-type = "text/markdown"
 file = "README.md"
 
 [project.urls]
-Changelog = "https://github.com/ComPWA/sphinx-api-relink/releases"
-Documentation = "https://github.com/ComPWA/sphinx-api-relink/blob/main/README.md"
-Source = "https://github.com/ComPWA/sphinx-api-relink"
-Tracker = "https://github.com/ComPWA/sphinx-api-relink/issues"
+changelog = "https://github.com/ComPWA/sphinx-api-relink/releases"
+documentation = "https://compwa.github.io/sphinx-api-relink"
+issues = "https://github.com/ComPWA/sphinx-api-relink/issues"
+source = "https://github.com/ComPWA/sphinx-api-relink"
 
 [dependency-groups]
 dev = [

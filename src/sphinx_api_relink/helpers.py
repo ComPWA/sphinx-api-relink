@@ -59,7 +59,7 @@ def get_execution_mode() -> str:
         nb_execution_mode = get_execution_mode()
     """
     if "FORCE_EXECUTE_NB" in os.environ:
-        print("\033[93;1mWill run ALL Jupyter notebooks!\033[0m")  # noqa: T201
+        print_once("Will run ALL Jupyter notebooks!", color=Fore.YELLOW)
         return "force"
     if "EXECUTE_NB" in os.environ:
         return "cache"

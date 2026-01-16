@@ -212,7 +212,6 @@ split-on-trailing-comma = false
 "tests/*" = [
     "D",
     "INP001",
-    "PGH001",
     "PLR0913",
     "PLR2004",
     "S101",
@@ -238,4 +237,3 @@ trailing_comma_inline_array = true
 division-by-zero = "warn"
 possibly-missing-import = "warn"
 possibly-unresolved-reference = "warn"
-unused-ignore-comment = "warn"

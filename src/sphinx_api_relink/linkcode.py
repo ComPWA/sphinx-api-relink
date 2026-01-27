@@ -131,10 +131,10 @@ def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
     """
     repo_url = f"https://github.com/{github_repo}"
     if rev:
-        return f"{repo_url}/blob/{rev}"
+        return f"{repo_url}/tree/{rev}"
     second_attempt = True
     previous_url = None
-    url = f"{repo_url}/blob/main"
+    url = f"{repo_url}/tree/main"
     for try_rev in [
         _get_commit_sha(),
         _get_latest_tag(),
@@ -144,7 +144,7 @@ def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
     ]:
         if try_rev is None:
             continue
-        url = f"{repo_url}/blob/{try_rev}"
+        url = f"{repo_url}/tree/{try_rev}"
         if previous_url:
             if second_attempt:
                 second_attempt = False

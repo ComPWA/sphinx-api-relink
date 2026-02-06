@@ -46,10 +46,10 @@ content-type = "text/markdown"
 file = "README.md"
 
 [project.urls]
-changelog = "https://github.com/ComPWA/sphinx-api-relink/releases"
-documentation = "https://compwa.github.io/sphinx-api-relink"
-issues = "https://github.com/ComPWA/sphinx-api-relink/issues"
-source = "https://github.com/ComPWA/sphinx-api-relink"
+Changelog = "https://github.com/ComPWA/sphinx-api-relink/releases"
+Documentation = "https://compwa.github.io/sphinx-api-relink"
+Issues = "https://github.com/ComPWA/sphinx-api-relink/issues"
+Source = "https://github.com/ComPWA/sphinx-api-relink"
 
 [dependency-groups]
 dev = [
@@ -212,7 +212,6 @@ split-on-trailing-comma = false
 "tests/*" = [
     "D",
     "INP001",
-    "PGH001",
     "PLR0913",
     "PLR2004",
     "S101",
@@ -238,4 +237,6 @@ trailing_comma_inline_array = true
 division-by-zero = "warn"
 possibly-missing-import = "warn"
 possibly-unresolved-reference = "warn"
-unused-ignore-comment = "warn"
+
+[tool.ty.terminal]
+error-on-warning = true

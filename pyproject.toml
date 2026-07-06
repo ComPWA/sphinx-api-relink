@@ -97,16 +97,10 @@ isolated = true
 no-group = "dev"
 type = "uv"
 
-[tool.poe.tasks.all]
-help = "Run all continuous integration (CI) tasks locally"
-ignore_fail = "return_non_zero"
-sequence = [
-    "doc",
-    "linkcheck",
-    "style",
-]
+[tool.poe.groups.doc]
+heading = "Documentation"
 
-[tool.poe.tasks.doc]
+[tool.poe.groups.doc.tasks.doc]
 cmd = """
     sphinx-build \
         --builder=html \
@@ -119,7 +113,7 @@ cmd = """
 executor = {group = "doc"}
 help = "Build documentation and API"
 
-[tool.poe.tasks.doclive]
+[tool.poe.groups.doc.tasks.doclive]
 cmd = """
 sphinx-autobuild \
     --builder=html \
@@ -138,7 +132,7 @@ sphinx-autobuild \
 executor = {group = "doc", with = "sphinx-autobuild"}
 help = "Set up a server to directly preview changes to the HTML pages"
 
-[tool.poe.tasks.linkcheck]
+[tool.poe.groups.doc.tasks.linkcheck]
 cmd = """
 sphinx-build \
     --builder=linkcheck \
@@ -149,10 +143,27 @@ sphinx-build \
 executor = {group = "doc"}
 help = "Check external links in the documentation (requires internet connection)"
 
+[tool.poe.tasks.all]
+help = "Run all continuous integration (CI) tasks locally"
+ignore_fail = "return_non_zero"
+sequence = [
+    "doc",
+    "linkcheck",
+    "style",
+]
+
 [tool.poe.tasks.style]
 cmd = "pre-commit run --all-files"
 executor = {isolated = false, no-group = ""}
 help = "Perform all linting, formatting, and spelling checks"
+
+[tool.poe.tasks.upgrade]
+executor = {type = "simple"}
+help = "Upgrade lock files"
+parallel = [
+    {cmd = "pre-commit autoupdate -j8"},
+    {cmd = "uv lock --upgrade"},
+]
 
 [tool.ruff]
 preview = true

@@ -203,10 +203,20 @@ task-tags = ["cspell"]
 split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
-"docs/*" = ["INP001", "S101", "S113"]
+"docs/*" = [
+    "INP001",
+    "S101",
+    "S113",
+]
 "docs/conf.py" = ["D100"]
 "setup.py" = ["D100"]
-"tests/*" = ["D", "INP001", "PLR0913", "PLR2004", "S101"]
+"tests/*" = [
+    "D",
+    "INP001",
+    "PLR0913",
+    "PLR2004",
+    "S101",
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -237,7 +247,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/b1a4216872b0e6539e0b70a051a6d3aaed874356/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.0/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [tool.ty.rules]

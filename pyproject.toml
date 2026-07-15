@@ -1,24 +1,28 @@
-[build-system]
-build-backend = "setuptools.build_meta"
-requires = [
-    "setuptools>=61.2",
-    "setuptools_scm",
-]
-
 [project]
-authors = [{name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de"}]
+name = "sphinx-api-relink"
+description = "Relink type hints in your Sphinx API"
+requires-python = ">=3.10"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+authors = [{ name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de" }]
+maintainers = [{ email = "compwa-admin@ep1.rub.de" }]
+keywords = [
+    "autodoc",
+    "reference",
+    "relink",
+    "sphinx",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
+    "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python",
     "Topic :: Documentation",
     "Topic :: Utilities",
     "Typing :: Typed",
@@ -28,22 +32,11 @@ dependencies = [
     "docutils",
     "sphinx",
 ]
-description = "Relink type hints in your Sphinx API"
 dynamic = ["version"]
-keywords = [
-    "autodoc",
-    "reference",
-    "relink",
-    "sphinx",
-]
-license = {text = "BSD 3-Clause License"}
-maintainers = [{email = "compwa-admin@ep1.rub.de"}]
-name = "sphinx-api-relink"
-requires-python = ">=3.10"
 
 [project.readme]
-content-type = "text/markdown"
 file = "README.md"
+content-type = "text/markdown"
 
 [project.urls]
 Changelog = "https://github.com/ComPWA/sphinx-api-relink/releases"
@@ -54,8 +47,8 @@ Source = "https://github.com/ComPWA/sphinx-api-relink"
 [dependency-groups]
 dev = [
     "ruff",
-    {include-group = "doc"},
-    {include-group = "style"},
+    { include-group = "doc" },
+    { include-group = "style" },
 ]
 doc = [
     "myst-parser",
@@ -70,23 +63,19 @@ style = [
     "types-requests",
 ]
 
-[tool.setuptools]
-include-package-data = true
-license-files = ["LICENSE"]
-package-dir = {"" = "src"}
-
-[tool.setuptools.package-data]
-"*" = [
-    "py.typed",
-    "templates/*.rst.jinja",
+[build-system]
+requires = [
+    "setuptools>=61.2",
+    "setuptools_scm",
 ]
+build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-namespaces = false
-where = ["src"]
+[tool.compwa.policy]
+repo-name = "sphinx-api-relink"
+repo-title = "sphinx-api-relink"
 
-[tool.setuptools_scm]
-write_to = "src/version.py"
+[tool.compwa.policy.python]
+type-checker = ["ty"]
 
 [tool.coverage.run]
 branch = true
@@ -97,16 +86,10 @@ isolated = true
 no-group = "dev"
 type = "uv"
 
-[tool.poe.tasks.all]
-help = "Run all continuous integration (CI) tasks locally"
-ignore_fail = "return_non_zero"
-sequence = [
-    "doc",
-    "linkcheck",
-    "style",
-]
+[tool.poe.groups.doc]
+heading = "Documentation"
 
-[tool.poe.tasks.doc]
+[tool.poe.groups.doc.tasks.doc]
 cmd = """
     sphinx-build \
         --builder=html \
@@ -116,10 +99,10 @@ cmd = """
         docs/ \
         docs/_build/html/
 """
-executor = {group = "doc"}
+executor = { group = "doc" }
 help = "Build documentation and API"
 
-[tool.poe.tasks.doclive]
+[tool.poe.groups.doc.tasks.doclive]
 cmd = """
 sphinx-autobuild \
     --builder=html \
@@ -135,10 +118,10 @@ sphinx-autobuild \
     docs/ \
     docs/_build/html/
 """
-executor = {group = "doc", with = "sphinx-autobuild"}
+executor = { group = "doc", with = "sphinx-autobuild" }
 help = "Set up a server to directly preview changes to the HTML pages"
 
-[tool.poe.tasks.linkcheck]
+[tool.poe.groups.doc.tasks.linkcheck]
 cmd = """
 sphinx-build \
     --builder=linkcheck \
@@ -146,13 +129,31 @@ sphinx-build \
     docs/ \
     docs/_build/linkcheck/
 """
-executor = {group = "doc"}
+executor = { group = "doc" }
 help = "Check external links in the documentation (requires internet connection)"
+
+[tool.poe.tasks.all]
+help = "Run all continuous integration (CI) tasks locally"
+ignore_fail = "return_non_zero"
+sequence = ["style", "doc", "linkcheck"]
 
 [tool.poe.tasks.style]
 cmd = "pre-commit run --all-files"
-executor = {isolated = false, no-group = ""}
+executor = { isolated = false, no-group = "" }
 help = "Perform all linting, formatting, and spelling checks"
+
+[tool.poe.tasks.upgrade]
+executor = { type = "simple" }
+help = "Upgrade lock files"
+parallel = ["_upgrade-precommit", "_upgrade-uv"]
+
+[tool.poe.tasks._upgrade-precommit]
+cmd = "pre-commit autoupdate -j8"
+executor = { type = "simple" }
+
+[tool.poe.tasks._upgrade-uv]
+cmd = "uv lock --upgrade"
+executor = { type = "simple" }
 
 [tool.ruff]
 preview = true
@@ -220,18 +221,34 @@ split-on-trailing-comma = false
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.tomlsort]
-all = false
-ignore_case = true
-in_place = true
-sort_first = [
-    "build-system",
-    "project",
-    "tool.setuptools",
-    "tool.setuptools_scm",
+[tool.setuptools]
+include-package-data = true
+package-dir = { "" = "src" }
+
+[tool.setuptools.package-data]
+"*" = [
+    "py.typed",
+    "templates/*.rst.jinja",
 ]
-spaces_indent_inline_array = 4
-trailing_comma_inline_array = true
+
+[tool.setuptools.packages.find]
+namespaces = false
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/version.py"
+
+[tool.tombi.format.rules]
+indent-width = 4
+line-width = 88
+
+[tool.tombi.lint.rules]
+key-empty = "off"
+
+[[tool.tombi.schemas]]
+root = "tool.compwa.policy"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.0/compwa-policy.schema.json"
+include = ["pyproject.toml"]
 
 [tool.ty.rules]
 division-by-zero = "warn"

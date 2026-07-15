@@ -16,7 +16,7 @@
     "soulcode.vscode-unwanted-extensions",
     "stkb.rewrap",
     "streetsidesoftware.code-spell-checker",
-    "tamasfe.even-better-toml",
+    "tombi-toml.tombi",
     "wholroyd.jinja",
     "yzhang.markdown-all-in-one"
   ],
@@ -31,6 +31,7 @@
     "ms-python.mypy-type-checker",
     "ms-python.pylint",
     "ms-python.vscode-pylance",
+    "tamasfe.even-better-toml",
     "travisillig.vscode-json-stable-stringify",
     "tyriar.sort-lines"
   ]

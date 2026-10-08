@@ -169,35 +169,9 @@ line-ending = "lf"
 
 [tool.ruff.lint]
 ignore = [
-    "ANN401",
-    "COM812",
-    "CPY001",
-    "D101",
-    "D102",
-    "D103",
-    "D104",
-    "D105",
-    "D107",
-    "D203",
-    "D213",
-    "D407",
-    "D416",
     "DOC",
-    "E501",
     "FBT",
-    "FURB101",
-    "FURB103",
-    "FURB140",
-    "G004",
-    "ISC001",
-    "PLW1514",
-    "PLW2901",
-    "PT001",
     "PTH",
-    "RUF067",
-    "S404",
-    "SIM108",
-    "UP036",
     "any-type",
     "if-else-block-instead-of-if-exp",
     "incorrect-blank-line-before-class",
@@ -209,15 +183,19 @@ ignore = [
     "missing-trailing-comma",
     "multi-line-summary-second-line",
     "non-empty-init-module",
+    "outdated-version-block",
     "pytest-fixture-incorrect-parentheses-style",
     "read-whole-file",
+    "redefined-loop-name",
     "reimplemented-starmap",
     "single-line-implicit-string-concatenation",
+    "suspicious-subprocess-import",
     "undocumented-magic-method",
     "undocumented-public-class",
     "undocumented-public-function",
     "undocumented-public-init",
     "undocumented-public-method",
+    "undocumented-public-package",
     "unspecified-encoding",
     "write-whole-file",
 ]
@@ -229,25 +207,21 @@ split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
 "docs/*" = [
-    "INP001",
-    "S101",
-    "S113",
     "assert",
     "implicit-namespace-package",
     "request-without-timeout",
 ]
 "docs/conf.py" = [
-    "D100",
     "builtin-variable-shadowing",
     "undocumented-public-module",
 ]
-"setup.py" = ["D100"]
+"setup.py" = ["undocumented-public-module"]
 "tests/*" = [
     "D",
-    "INP001",
-    "PLR0913",
-    "PLR2004",
-    "S101",
+    "implicit-namespace-package",
+    "too-many-arguments",
+    "magic-value-comparison",
+    "assert",
 ]
 
 [tool.ruff.lint.pydocstyle]

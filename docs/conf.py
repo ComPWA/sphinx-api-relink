@@ -21,7 +21,7 @@ autosectionlabel_prefix_document = True
 codeautolink_concat_default = True
 copybutton_prompt_is_regexp = True
 copybutton_prompt_text = r">>> |\.\.\. "  # doctest
-copyright = ""
+copyright = f"2023, {ORGANIZATION}"
 default_role = "py:obj"
 extensions = [
     "myst_parser",

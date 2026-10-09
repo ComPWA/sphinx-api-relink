@@ -11,7 +11,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "BuildEnvironment": "sphinx.environment.BuildEnvironment",
     "Sphinx": "sphinx.application.Sphinx",
 }
-author = "Common Partial Wave Analysis"
+author = ""
 autodoc_default_options = {
     "exclude-members": "setup",
 }

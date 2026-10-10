@@ -1,7 +1,7 @@
 [project]
 name = "sphinx-api-relink"
 description = "Relink type hints in your Sphinx API"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
 authors = [{ name = "Common Partial Wave Analysis", email = "compwa-admin@ep1.rub.de" }]
@@ -18,11 +18,11 @@ classifiers = [
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: Documentation",
     "Topic :: Utilities",
     "Typing :: Typed",
@@ -138,17 +138,20 @@ ignore_fail = "return_non_zero"
 sequence = ["style", "doc", "linkcheck"]
 
 [tool.poe.tasks.style]
-cmd = "pre-commit run --all-files"
+cmd = "prek run --all-files"
 executor = { isolated = false, no-group = "" }
 help = "Perform all linting, formatting, and spelling checks"
 
 [tool.poe.tasks.upgrade]
 executor = { type = "simple" }
 help = "Upgrade lock files"
-parallel = ["_upgrade-precommit", "_upgrade-uv"]
+parallel = [
+    "_upgrade-precommit",
+    "_upgrade-uv",
+]
 
 [tool.poe.tasks._upgrade-precommit]
-cmd = "pre-commit autoupdate -j8"
+cmd = "prek autoupdate"
 executor = { type = "simple" }
 
 [tool.poe.tasks._upgrade-uv]
@@ -166,35 +169,35 @@ line-ending = "lf"
 
 [tool.ruff.lint]
 ignore = [
-    "ANN401",
-    "COM812",
-    "CPY001",
-    "D101",
-    "D102",
-    "D103",
-    "D104",
-    "D105",
-    "D107",
-    "D203",
-    "D213",
-    "D407",
-    "D416",
     "DOC",
-    "E501",
     "FBT",
-    "FURB101",
-    "FURB103",
-    "FURB140",
-    "G004",
-    "ISC001",
-    "PLW1514",
-    "PLW2901",
-    "PT001",
     "PTH",
-    "RUF067",
-    "S404",
-    "SIM108",
-    "UP036",
+    "any-type",
+    "if-else-block-instead-of-if-exp",
+    "incorrect-blank-line-before-class",
+    "line-too-long",
+    "logging-f-string",
+    "missing-copyright-notice",
+    "missing-dashed-underline-after-section",
+    "missing-section-name-colon",
+    "missing-trailing-comma",
+    "multi-line-summary-second-line",
+    "non-empty-init-module",
+    "outdated-version-block",
+    "pytest-fixture-incorrect-parentheses-style",
+    "read-whole-file",
+    "redefined-loop-name",
+    "reimplemented-starmap",
+    "single-line-implicit-string-concatenation",
+    "suspicious-subprocess-import",
+    "undocumented-magic-method",
+    "undocumented-public-class",
+    "undocumented-public-function",
+    "undocumented-public-init",
+    "undocumented-public-method",
+    "undocumented-public-package",
+    "unspecified-encoding",
+    "write-whole-file",
 ]
 select = ["ALL"]
 task-tags = ["cspell"]
@@ -204,18 +207,21 @@ split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
 "docs/*" = [
-    "INP001",
-    "S101",
-    "S113",
+    "assert",
+    "implicit-namespace-package",
+    "request-without-timeout",
 ]
-"docs/conf.py" = ["D100"]
-"setup.py" = ["D100"]
+"docs/conf.py" = [
+    "builtin-variable-shadowing",
+    "undocumented-public-module",
+]
+"setup.py" = ["undocumented-public-module"]
 "tests/*" = [
     "D",
-    "INP001",
-    "PLR0913",
-    "PLR2004",
-    "S101",
+    "implicit-namespace-package",
+    "too-many-arguments",
+    "magic-value-comparison",
+    "assert",
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -247,7 +253,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.0/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.0/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [tool.ty.rules]

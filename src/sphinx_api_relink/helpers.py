@@ -113,7 +113,7 @@ def get_git_revision(*, prefer_branch: bool = False) -> str:
 
 def _get_branch() -> str | None:
     result = subprocess.run(
-        ["git", "rev-parse", "--abbrev-ref", "HEAD"],  # noqa: S607
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],  # ruff: ignore[start-process-with-partial-path]
         capture_output=True,
         check=True,
         text=True,
@@ -127,7 +127,7 @@ def _get_branch() -> str | None:
 @cache
 def _get_commit_sha() -> str:
     result = subprocess.run(
-        ["git", "rev-parse", "HEAD"],  # noqa: S607
+        ["git", "rev-parse", "HEAD"],  # ruff: ignore[start-process-with-partial-path]
         capture_output=True,
         check=True,
         text=True,
@@ -139,7 +139,7 @@ def _get_commit_sha() -> str:
 def _get_latest_tag() -> str | None:
     try:
         result = subprocess.check_output(
-            ["git", "describe", "--tags", "--exact-match"],  # noqa: S607
+            ["git", "describe", "--tags", "--exact-match"],  # ruff: ignore[start-process-with-partial-path]
             stderr=subprocess.PIPE,
             universal_newlines=True,
         )
@@ -213,7 +213,7 @@ def _get_version_from_constraints(package_name: str) -> str | None:
         if not line:
             continue
         line_segments = tuple(line.split("=="))
-        if len(line_segments) != 2:  # noqa: PLR2004
+        if len(line_segments) != 2:  # ruff: ignore[magic-value-comparison]
             continue
         _, installed_version, *_ = line_segments
         return installed_version.strip()
@@ -321,4 +321,4 @@ def print_once(message: str, *, color: str = Fore.RED) -> None:
         print_once("This is an important message!", color=Fore.GREEN)
     """
     colored_text = f"{color}{message}{Style.RESET_ALL}"
-    print(colored_text)  # noqa: T201
+    print(colored_text)  # ruff: ignore[print]

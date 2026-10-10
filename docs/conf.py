@@ -11,7 +11,7 @@ api_target_substitutions: dict[str, str | tuple[str, str]] = {
     "BuildEnvironment": "sphinx.environment.BuildEnvironment",
     "Sphinx": "sphinx.application.Sphinx",
 }
-author = "Common Partial Wave Analysis"
+author = ""
 autodoc_default_options = {
     "exclude-members": "setup",
 }
@@ -21,7 +21,7 @@ autosectionlabel_prefix_document = True
 codeautolink_concat_default = True
 copybutton_prompt_is_regexp = True
 copybutton_prompt_text = r">>> |\.\.\. "  # doctest
-copyright = "2026, Common Partial Wave Analysis"  # noqa: A001
+copyright = f"2023, {ORGANIZATION}"
 default_role = "py:obj"
 extensions = [
     "myst_parser",

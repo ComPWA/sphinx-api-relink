@@ -174,7 +174,7 @@ def _url_exists(url: str) -> bool:
         response = requests.head(url, timeout=5)
         redirect_url = response.headers.get("Location")
         if redirect_url is None:
-            return response.status_code < 400  # noqa: PLR2004
+            return response.status_code < 400  # ruff: ignore[magic-value-comparison]
         return _url_exists(redirect_url)
     except requests.RequestException:
         return False

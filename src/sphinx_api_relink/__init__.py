@@ -98,7 +98,7 @@ __SPHINX_VERSION = tuple(int(i) for i in version("sphinx").split(".") if i.isdig
 if __SPHINX_VERSION < (7, 3):
     from sphinx.domains.python import parse_reftarget  # ty:ignore[unresolved-import]
 else:
-    from sphinx.domains.python._annotations import parse_reftarget  # noqa: PLC2701
+    from sphinx.domains.python._annotations import parse_reftarget  # ruff: ignore[import-private-name]
 
 if TYPE_CHECKING:
     from docutils.parsers.rst.states import Inliner
@@ -222,7 +222,7 @@ def _replace_type_to_xref(app: Sphinx, _: BuildEnvironment) -> None:
     if __SPHINX_VERSION < (7, 3):
         sphinx.domains.python.type_to_xref = _new_type_to_xref  # ty:ignore[invalid-assignment]
     else:
-        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref  # noqa: SLF001  # ty:ignore[invalid-assignment]
+        sphinx.domains.python._annotations.type_to_xref = _new_type_to_xref  # ruff: ignore[private-member-access]  # ty:ignore[invalid-assignment]
 
 
 def _get_target_substitutions(app: Sphinx) -> dict[str, str | tuple[str, str]]:
@@ -241,7 +241,7 @@ def _get_target_substitutions(app: Sphinx) -> dict[str, str | tuple[str, str]]:
                 f" {type(v).__name__} for key {k!r}"
             )
             raise TypeError(msg)
-        if isinstance(v, tuple) and len(v) != 2:  # noqa: PLR2004
+        if isinstance(v, tuple) and len(v) != 2:  # ruff: ignore[magic-value-comparison]
             msg = (
                 f"If dict values of {config_key} are a tuple, they must have length 2,"
                 f" but got {len(v)} for key {k!r}"
@@ -288,14 +288,14 @@ def _create_nodes(env: BuildEnvironment, title: str) -> list[nodes.Node]:
 
 
 def _wiki_role(pattern: str) -> RoleFunction:
-    def role(  # noqa: PLR0913, PLR0917
-        name: str,  # noqa: ARG001
+    def role(  # ruff: ignore[too-many-arguments, too-many-positional-arguments]
+        name: str,  # ruff: ignore[unused-function-argument]
         rawtext: str,
         text: str,
-        lineno: int,  # noqa: ARG001
-        inliner: Inliner,  # noqa: ARG001
+        lineno: int,  # ruff: ignore[unused-function-argument]
+        inliner: Inliner,  # ruff: ignore[unused-function-argument]
         options: dict | None = None,
-        content: list[str] | None = None,  # noqa: ARG001
+        content: list[str] | None = None,  # ruff: ignore[unused-function-argument]
     ) -> tuple[list[nodes.Node], list[nodes.system_message]]:
         output_text = text
         output_text = output_text.replace("_", " ")

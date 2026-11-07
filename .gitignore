@@ -48,12 +48,8 @@ uv.lock
 **.code-workspace
 
 # Exceptions
-!.clang-format
 !.cspell.json
 !.github/*.yml
 !.github/*/*.yml
-!.gitpod.yml
 !.pre-commit-config.yaml
-!.readthedocs.yml
 !.vscode/*.json
-!codecov.yml

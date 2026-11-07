@@ -51,7 +51,7 @@ dev = [
     { include-group = "style" },
 ]
 doc = [
-    "myst-parser >=5.1",
+    "myst-parser>=5.1",
     "sphinx-book-theme",
     "sphinx-codeautolink",
     "sphinx-copybutton",

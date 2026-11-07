@@ -96,7 +96,7 @@ from sphinx_api_relink.linkcode import get_linkcode_resolve
 
 __SPHINX_VERSION = tuple(int(i) for i in version("sphinx").split(".") if i.isdigit())
 if __SPHINX_VERSION < (7, 3):
-    from sphinx.domains.python import parse_reftarget  # ty:ignore[unresolved-import]
+    from sphinx.domains.python import parse_reftarget  # ty:ignore[import-not-found]
 else:
     from sphinx.domains.python._annotations import parse_reftarget  # ruff: ignore[import-private-name]
 

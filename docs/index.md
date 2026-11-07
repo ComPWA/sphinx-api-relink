@@ -44,9 +44,8 @@ The API is generated with the same style used by the ComPWA repositories (see e.
 generate_apidoc_use_compwa_template = False
 ```
 
-:::{tip}
-See the {doc}`API page <api/sphinx_api_relink>` for all configuration options and helper functions.
-:::
+> [!TIP]
+> See the {doc}`API page <api/sphinx_api_relink>` for all configuration options and helper functions.
 
 ## Relink type hints
 

@@ -18,6 +18,7 @@
 # Temporary files
 .fuse_hidden*
 .ipynb_checkpoints/
+.lycheecache
 __pycache__/
 
 # Build files

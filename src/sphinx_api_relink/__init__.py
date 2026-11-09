@@ -4,8 +4,9 @@ The following options can be set in your :doc:`Sphinx configuration file
 <sphinx:usage/configuration>` to steer the behavior of the the :mod:`sphinx_api_relink`
 extension.
 
-API documentation generation
-----------------------------
+##############################
+ API documentation generation
+##############################
 
 .. confval:: generate_apidoc_package_path
     :type: ``str | list[str]``
@@ -40,9 +41,9 @@ API documentation generation
     the generated API documentation using the :doc:`Sphinx Book Theme
     <sphinx_book_theme:index>`.
 
-
-Intersphinx relinking
----------------------
+#######################
+ Intersphinx relinking
+#######################
 
 .. confval:: api_github_repo
     :type: ``str``

@@ -47,6 +47,7 @@ Source = "https://github.com/ComPWA/sphinx-api-relink"
 [dependency-groups]
 dev = [
     "ruff",
+    "ty",
     { include-group = "doc" },
     { include-group = "style" },
 ]
@@ -57,7 +58,6 @@ doc = [
     "sphinx-copybutton",
 ]
 style = [
-    "ty",
     "types-colorama",
     "types-docutils",
     "types-requests",
@@ -80,6 +80,10 @@ type-checker = ["ty"]
 [tool.coverage.run]
 branch = true
 source = ["src"]
+
+[tool.docstrfmt]
+docstring-trailing-line = false
+format-python-code-blocks = false
 
 [tool.lychee]
 cache = true
@@ -268,7 +272,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.3/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.4/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [tool.ty.rules]

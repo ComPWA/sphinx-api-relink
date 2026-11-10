@@ -1,4 +1,4 @@
-"""A linkcode resolver for using ``sphinx.ext.linkcode`` with GitHub."""
+"""A linkcode resolver for using :mod:`sphinx.ext.linkcode` with GitHub."""
 
 from __future__ import annotations
 

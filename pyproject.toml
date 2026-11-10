@@ -104,7 +104,6 @@ include_verbatim = true
 max_cache_age = "7d"
 remap = [
     '^git\+(https[:]//[^@]+)(@.*)?$ $1',
-    "^(.+)/n$ $1",
     '^(https[:]//github\.com/ComPWA/sphinx\-api\-relink/compare)/\$PREVIOUS_TAG.*$ $1',
     '^https[:]//pypi\.org/p/\$$ https://pypi.org/project/sphinx-api-relink/',
 ]

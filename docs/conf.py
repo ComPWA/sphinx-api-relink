@@ -23,6 +23,11 @@ copybutton_prompt_is_regexp = True
 copybutton_prompt_text = r">>> |\.\.\. "  # doctest
 copyright = f"2023, {ORGANIZATION}"
 default_role = "py:obj"
+exclude_patterns = [
+    "**AGENTS.md",
+    "**CLAUDE.md",
+    "**GEMINI.md",
+]
 extensions = [
     "myst_parser",
     "sphinx_api_relink",

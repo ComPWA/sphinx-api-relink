@@ -4,8 +4,9 @@ The following options can be set in your :doc:`Sphinx configuration file
 <sphinx:usage/configuration>` to steer the behavior of the the :mod:`sphinx_api_relink`
 extension.
 
-API documentation generation
-----------------------------
+##############################
+ API documentation generation
+##############################
 
 .. confval:: generate_apidoc_package_path
     :type: ``str | list[str]``
@@ -40,9 +41,9 @@ API documentation generation
     the generated API documentation using the :doc:`Sphinx Book Theme
     <sphinx_book_theme:index>`.
 
-
-Intersphinx relinking
----------------------
+#######################
+ Intersphinx relinking
+#######################
 
 .. confval:: api_github_repo
     :type: ``str``
@@ -96,7 +97,7 @@ from sphinx_api_relink.linkcode import get_linkcode_resolve
 
 __SPHINX_VERSION = tuple(int(i) for i in version("sphinx").split(".") if i.isdigit())
 if __SPHINX_VERSION < (7, 3):
-    from sphinx.domains.python import parse_reftarget  # ty:ignore[unresolved-import]
+    from sphinx.domains.python import parse_reftarget  # ty:ignore[import-not-found]
 else:
     from sphinx.domains.python._annotations import parse_reftarget  # ruff: ignore[import-private-name]
 

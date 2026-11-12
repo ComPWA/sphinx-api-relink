@@ -1,4 +1,4 @@
-"""A linkcode resolver for using :code:`sphinx.ext.linkcode` with GitHub."""
+"""A linkcode resolver for using :mod:`sphinx.ext.linkcode` with GitHub."""
 
 from __future__ import annotations
 
@@ -123,11 +123,13 @@ def _get_object_from_module(module_name: str, fullname: str) -> Any | None:
 def get_blob_url(github_repo: str, *, rev: str | None = None) -> str:
     """Get the base URL for blobs in the given GitHub repository.
 
-    If :code:`rev` is provided, it is used directly. Otherwise, several attempts are
-    made to determine a valid Git ref (commit SHA, tag, or branch) that exists in the
+    If ``rev`` is provided, it is used directly. Otherwise, several attempts are made to
+    determine a valid Git ref (commit SHA, tag, or branch) that exists in the
     repository.
 
-    .. warning:: This function makes network requests to GitHub to verify the existence of URLs.
+    .. warning::
+
+        This function makes network requests to GitHub to verify the existence of URLs.
     """
     repo_url = f"https://github.com/{github_repo}"
     if rev:

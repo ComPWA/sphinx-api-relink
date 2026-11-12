@@ -23,6 +23,11 @@ copybutton_prompt_is_regexp = True
 copybutton_prompt_text = r">>> |\.\.\. "  # doctest
 copyright = f"2023, {ORGANIZATION}"
 default_role = "py:obj"
+exclude_patterns = [
+    "**AGENTS.md",
+    "**CLAUDE.md",
+    "**GEMINI.md",
+]
 extensions = [
     "myst_parser",
     "sphinx_api_relink",
@@ -85,7 +90,11 @@ intersphinx_mapping = {
     "sphinx_book_theme": ("https://sphinx-book-theme.readthedocs.io/en/stable", None),
     "sphinx": ("https://www.sphinx-doc.org/en/master", None),
 }
-myst_enable_extensions = ["colon_fence"]
+myst_colon_fence_exact_match = True
+myst_enable_extensions = [
+    "alert",
+    "colon_fence",
+]
 nitpick_ignore = [
     ("py:class", "RoleFunction"),
 ]

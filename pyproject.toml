@@ -47,17 +47,17 @@ Source = "https://github.com/ComPWA/sphinx-api-relink"
 [dependency-groups]
 dev = [
     "ruff",
+    "ty",
     { include-group = "doc" },
     { include-group = "style" },
 ]
 doc = [
-    "myst-parser",
+    "myst-parser>=5.1",
     "sphinx-book-theme",
     "sphinx-codeautolink",
     "sphinx-copybutton",
 ]
 style = [
-    "ty",
     "types-colorama",
     "types-docutils",
     "types-requests",
@@ -74,12 +74,39 @@ build-backend = "setuptools.build_meta"
 repo-name = "sphinx-api-relink"
 repo-title = "sphinx-api-relink"
 
+[tool.compwa.policy.github]
+dependabot-assignees = ["redeboer"]
+
 [tool.compwa.policy.python]
 type-checker = ["ty"]
 
 [tool.coverage.run]
 branch = true
 source = ["src"]
+
+[tool.docstrfmt]
+docstring-trailing-line = false
+format-python-code-blocks = false
+
+[tool.lychee]
+cache = true
+cache_exclude_status = "400.."
+# [:] keeps Lychee from extracting regex patterns as URLs.
+exclude = [
+    "%7B[^/]*%7D",  # URL templates are completed at build or runtime
+    "^https[:]//x-access-token/$",  # Token-authenticated Git remote placeholder
+    '\$(?:NEXT_[A-Z_]+|PREVIOUS_TAG)',  # Release Drafter substitutes these placeholders at runtime
+]
+extensions = ["json", "md", "py", "toml", "yaml", "yml"]
+hidden = true  # Include the workflows under .github/
+include_fragments = "anchor-only"
+include_verbatim = true
+max_cache_age = "7d"
+remap = [
+    '^git\+(https[:]//[^@]+)(@.*)?$ $1',
+    '^(https[:]//github\.com/ComPWA/sphinx\-api\-relink/compare)/\$PREVIOUS_TAG.*$ $1',
+    '^https[:]//pypi\.org/p/\$$ https://pypi.org/project/sphinx-api-relink/',
+]
 
 [tool.poe.executor]
 isolated = true
@@ -122,20 +149,18 @@ executor = { group = "doc", with = "sphinx-autobuild" }
 help = "Set up a server to directly preview changes to the HTML pages"
 
 [tool.poe.groups.doc.tasks.linkcheck]
-cmd = """
-sphinx-build \
-    --builder=linkcheck \
-    --show-traceback \
-    docs/ \
-    docs/_build/linkcheck/
-"""
-executor = { group = "doc" }
-help = "Check external links in the documentation (requires internet connection)"
+cmd = "uvx --from lychee-bin lychee . --quiet"
+executor = { type = "simple" }
+help = "Check links and fragments in repository sources (requires internet connection)"
 
 [tool.poe.tasks.all]
 help = "Run all continuous integration (CI) tasks locally"
 ignore_fail = "return_non_zero"
-sequence = ["style", "doc", "linkcheck"]
+sequence = [
+    "style",
+    "linkcheck",
+    "doc",
+]
 
 [tool.poe.tasks.style]
 cmd = "prek run --all-files"
@@ -253,7 +278,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.1/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.7/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [tool.ty.rules]

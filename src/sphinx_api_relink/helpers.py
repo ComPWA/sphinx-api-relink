@@ -28,7 +28,9 @@ def get_branch_name() -> str:
     <https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context>`_
     on GitHub Docs.
 
-    .. seealso:: :func:`get_git_revision` for a more robust alternative that also works locally.
+    .. seealso::
+
+        :func:`get_git_revision` for a more robust alternative that also works locally.
     """
     branch_name = os.environ.get("READTHEDOCS_VERSION")
     if branch_name == "latest":
@@ -92,14 +94,14 @@ def get_git_revision(*, prefer_branch: bool = False) -> str:
             "use_edit_page_button": True,
         }
 
-    :param prefer_branch:
+    :param prefer_branch: If `True`, return the current branch name if no tag is found.
+        If `False`, return the commit SHA if no tag is found. In the
+        :confval:`html_theme_options` example above, we chose to prefer the branch name,
+        because that makes more sense for editing pages on GitHub.
 
-        If `True`, return the current branch name if no tag is found. If `False`, return
-        the commit SHA if no tag is found. In the :confval:`html_theme_options` example
-        above, we chose to prefer the branch name, because that makes more sense for
-        editing pages on GitHub.
+        .. seealso::
 
-        .. seealso:: https://github.com/ComPWA/sphinx-api-relink/issues/22
+            https://github.com/ComPWA/sphinx-api-relink/issues/22
     """
     tag = _get_latest_tag()
     if tag is not None:
@@ -259,7 +261,6 @@ def set_intersphinx_version_remapping(
 
     .. code-block:: python
 
-
         from sphinx_api_relink.helpers import set_intersphinx_version_remapping
 
         set_intersphinx_version_remapping({
@@ -269,7 +270,6 @@ def set_intersphinx_version_remapping(
             },
             "ampform": {"0.15.12.dev.*": "0.15.11"},
         })
-
     """
     if not isinstance(version_remapping, dict):
         msg = (

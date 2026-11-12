@@ -18,6 +18,7 @@
 # Temporary files
 .fuse_hidden*
 .ipynb_checkpoints/
+.lycheecache
 __pycache__/
 
 # Build files
@@ -47,13 +48,18 @@ uv.lock
 .idea/
 **.code-workspace
 
+# Agent tooling
+.agents/
+.claude/
+.codex/
+.gemini/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+
 # Exceptions
-!.clang-format
 !.cspell.json
 !.github/*.yml
 !.github/*/*.yml
-!.gitpod.yml
 !.pre-commit-config.yaml
-!.readthedocs.yml
 !.vscode/*.json
-!codecov.yml
